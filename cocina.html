@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cocina Mambo</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#FAF7F2;--surface:#F0EBE3;--border:#DDD5C8;--text:#2C2016;--muted:#8A7A6E;--accent:#C4622D;--accent-lt:#F0D9CC;--green:#5E8A62;--green-lt:#DCE9DC;--dark:#1a1a2e;--teal:#4dd0e1}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.header{background:white;border-bottom:1px solid var(--border);padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100}
+.header-title{font-family:'Playfair Display',serif;font-size:20px;color:var(--accent);letter-spacing:-.3px}
+.btn-login{display:flex;align-items:center;gap:8px;padding:7px 14px;border:1px solid var(--border);border-radius:20px;background:white;cursor:pointer;font-size:13px;font-family:'Inter',sans-serif;color:var(--text)}
+.avatar{width:28px;height:28px;border-radius:50%;object-fit:cover}
+.main{max-width:640px;margin:0 auto;padding:20px 16px 100px}
+.search-wrap{position:relative;margin-bottom:14px}
+.search-input{width:100%;padding:11px 16px 11px 40px;border:1px solid var(--border);border-radius:10px;background:white;font-size:14px;font-family:'Inter',sans-serif;color:var(--text);outline:none}
+.search-input:focus{border-color:var(--accent)}
+.search-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:16px}
+.filtros-cat{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:10px;scrollbar-width:none}
+.filtros-cat::-webkit-scrollbar{display:none}
+.chip-cat{white-space:nowrap;padding:6px 13px;border-radius:20px;font-size:13px;cursor:pointer;border:1px solid var(--border);background:white;color:var(--muted);flex-shrink:0}
+.chip-cat.activo{background:var(--accent);border-color:var(--accent);color:white}
+.filtros-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}
+.chip-tag{padding:4px 11px;border-radius:20px;font-size:12px;cursor:pointer;border:1px solid var(--border);background:white;color:var(--muted)}
+.chip-tag.activo{background:var(--green);border-color:var(--green);color:white}
+.receta-card{background:white;border:1px solid var(--border);border-radius:12px;margin-bottom:10px;overflow:hidden;cursor:pointer}
+.receta-card-body{padding:14px 16px}
+.receta-cat{font-size:11px;color:var(--muted);margin-bottom:3px}
+.receta-nombre{font-family:'Playfair Display',serif;font-size:17px;line-height:1.3;margin-bottom:8px}
+.receta-meta{display:flex;gap:14px;align-items:center}
+.receta-meta span{font-size:12px;color:var(--muted)}
+.fav-btn{margin-left:auto;background:none;border:none;cursor:pointer;font-size:18px;padding:2px;line-height:1}
+.fuente-badge{font-size:10px;padding:2px 7px;border-radius:10px;font-weight:500}
+.fuente-oficial{background:var(--accent-lt);color:var(--accent)}
+.fuente-comunidad{background:var(--green-lt);color:var(--green)}
+.fuente-app{background:#e8e0f5;color:#6b3fa0}
+.empty{text-align:center;padding:60px 20px;color:var(--muted)}
+.empty-icon{font-size:48px;margin-bottom:12px}
+.empty-title{font-size:16px;font-weight:600;margin-bottom:6px;color:var(--text)}
+.empty-sub{font-size:13px;line-height:1.5}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;align-items:flex-end}
+.overlay.visible{display:flex}
+.modal{background:var(--bg);border-radius:16px 16px 0 0;width:100%;max-height:90vh;overflow-y:auto;padding:0 0 40px}
+.modal-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:12px auto}
+.modal-header{padding:0 20px 16px;border-bottom:1px solid var(--border)}
+.modal-cat{font-size:11px;color:var(--muted);margin-bottom:4px}
+.modal-nombre{font-family:'Playfair Display',serif;font-size:22px;line-height:1.3;margin-bottom:10px}
+.modal-meta{display:flex;gap:16px;align-items:center}
+.modal-meta span{font-size:13px;color:var(--muted)}
+.modal-section{padding:16px 20px 0}
+.modal-section-title{font-size:13px;font-weight:600;color:var(--muted);margin-bottom:10px}
+.escalado-row{display:flex;align-items:center;gap:12px;background:var(--surface);border-radius:10px;padding:10px 14px;margin-bottom:14px;flex-wrap:wrap}
+.escalado-label{font-size:13px;color:var(--muted)}
+.escalado-btns{display:flex;gap:4px;margin-left:auto}
+.btn-factor{padding:5px 10px;border:1px solid var(--border);border-radius:6px;background:white;font-size:12px;cursor:pointer;font-family:'Inter',sans-serif}
+.btn-factor.activo{background:var(--accent);border-color:var(--accent);color:white}
+.ing-row{display:flex;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:14px;align-items:center}
+.ing-dot{width:5px;height:5px;border-radius:50%;background:var(--accent);flex-shrink:0}
+.ing-cant{color:var(--muted);min-width:64px;font-size:13px}
+.paso-card{border:1px solid var(--border);border-radius:10px;margin-bottom:10px;overflow:hidden}
+.paso-texto{padding:12px 14px;display:flex;gap:10px;align-items:flex-start}
+.paso-num{background:var(--accent);color:white;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px}
+.paso-instr{font-size:14px;line-height:1.5}
+.paso-params{background:var(--dark);padding:10px 14px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.param-item{text-align:center}
+.param-label{color:#8888aa;font-size:10px;margin-bottom:2px}
+.param-val{color:var(--teal);font-size:13px;font-weight:600}
+.aviso-tiempo{background:#fff8e1;border-left:3px solid #f59e0b;padding:8px 12px;font-size:12px;color:#92400e;margin-top:0;border-radius:0 0 10px 10px}
+.fab{position:fixed;bottom:24px;right:20px;width:56px;height:56px;border-radius:50%;background:var(--accent);color:white;border:none;font-size:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(196,98,45,.4);z-index:150}
+.modal-agregar{background:var(--bg);border-radius:16px 16px 0 0;width:100%;max-height:92vh;overflow-y:auto;padding:0 20px 40px}
+.drop-zone{border:2px dashed var(--border);border-radius:12px;padding:28px;text-align:center;cursor:pointer;background:var(--surface);margin-bottom:14px;display:block}
+.drop-zone.activo{border-color:var(--accent);background:var(--accent-lt)}
+.previews{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.previews img{height:72px;width:auto;border-radius:8px;border:1px solid var(--border);object-fit:cover}
+.btn-primario{width:100%;padding:13px;background:var(--accent);color:white;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
+.btn-primario:disabled{opacity:.5;cursor:default}
+.btn-secundario{width:100%;padding:11px;background:transparent;border:1px solid var(--border);border-radius:10px;font-size:14px;color:var(--muted);cursor:pointer;font-family:'Inter',sans-serif;margin-top:8px}
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--text);color:white;padding:10px 20px;border-radius:20px;font-size:13px;opacity:0;transition:all .3s;pointer-events:none;z-index:300;white-space:nowrap}
+.toast.visible{opacity:1;transform:translateX(-50%) translateY(0)}
+.loading{text-align:center;padding:40px;color:var(--muted);font-size:14px}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="header-title">Cocina Mambo</div>
+  <button class="btn-login" id="btnLogin"><span>🔑</span><span id="loginLabel">Entrar con Google</span></button>
+</header>
+<main class="main">
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input class="search-input" id="busqueda" type="text" placeholder="Buscar receta o ingrediente…">
+  </div>
+  <div class="filtros-cat" id="filtrosCat"></div>
+  <div class="filtros-tags" id="filtrosTags"></div>
+  <div id="listaRecetas"><div class="loading">Cargando recetas…</div></div>
+</main>
+<button class="fab" id="fabAgregar" title="Agregar receta">+</button>
+<div class="toast" id="toast"></div>
+<div class="overlay" id="overlayDetalle"><div class="modal" id="modalDetalle"></div></div>
+<div class="overlay" id="overlayAgregar">
+  <div class="modal-agregar" id="modalAgregar">
+    <div class="modal-handle"></div>
+    <h2 style="font-family:'Playfair Display',serif;font-size:20px;margin-bottom:16px;">Agregar receta</h2>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">Subí las capturas de la app Mambo (ingredientes + pasos)</p>
+    <label class="drop-zone" id="dropZone">
+      <input type="file" accept="image/*" multiple id="inputImagenes" style="display:none">
+      <div style="font-size:32px;margin-bottom:8px;">📷</div>
+      <div style="font-weight:600;font-size:14px;" id="dropLabel">Seleccioná las capturas</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:4px;">Hasta 4 imágenes</div>
+    </label>
+    <div class="previews" id="previewsAgregar"></div>
+    <button class="btn-primario" id="btnExtraer" disabled>Extraer y guardar receta</button>
+    <button class="btn-secundario" id="btnCancelarAgregar">Cancelar</button>
+  </div>
+</div>
+
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import{getFirestore,collection,getDocs,addDoc,query,orderBy}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import{getAuth,signInWithPopup,GoogleAuthProvider,signOut,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+const firebaseConfig={apiKey:"AIzaSyAbN7TfbV6iXk1rmjJjsJuiM-XrwrCCT6Q",authDomain:"cocina-2d808.firebaseapp.com",projectId:"cocina-2d808",storageBucket:"cocina-2d808.firebasestorage.app",messagingSenderId:"537487557158",appId:"1:537487557158:web:3f8c1ee652c13d47541ce7"};
+const app=initializeApp(firebaseConfig);
+const db=getFirestore(app);
+const auth=getAuth(app);
+const provider=new GoogleAuthProvider();
+
+let usuario=null,recetas=[],favs=JSON.parse(localStorage.getItem("favs")||"{}"),catActiva="Todas",tagsActivos=new Set(),busquedaVal="",recetaActual=null,factorActual=1,imagenesSeleccionadas=[];
+
+const CATEGORIAS=["Todas","Básicos","Sopas y cremas","Salsas","Untables","Entrantes","Legumbres","Arroces","Pastas","Verduras","Carnes","Pescados","Huevos","Masas y panes","Postres","Desayunos","Bebidas"];
+const ETIQUETAS=["vegetariano","vegano","sin gluten","kosher","rápido","batch cooking","congelable"];
+
+onAuthStateChanged(auth,u=>{
+  usuario=u;
+  const btn=document.getElementById("btnLogin");
+  if(u){btn.innerHTML=`<img class="avatar" src="${u.photoURL}" alt=""><span>${u.displayName?.split(" ")[0]}</span>`;}
+  else{btn.innerHTML=`<span>🔑</span><span>Entrar con Google</span>`;}
+});
+
+document.getElementById("btnLogin").addEventListener("click",async()=>{
+  if(usuario){await signOut(auth);}
+  else{try{await signInWithPopup(auth,provider);}catch(e){console.error(e);}}
+});
+
+async function cargarRecetas(){
+  try{
+    const q=query(collection(db,"recetas"),orderBy("nombre"));
+    const snap=await getDocs(q);
+    recetas=snap.docs.map(d=>({id:d.id,...d.data()}));
+  }catch(e){recetas=[];}
+  renderLista();
+}
+
+function renderFiltros(){
+  const catEl=document.getElementById("filtrosCat");
+  catEl.innerHTML=CATEGORIAS.map(c=>`<button class="chip-cat${c===catActiva?" activo":""}" data-cat="${c}">${c}</button>`).join("");
+  catEl.querySelectorAll(".chip-cat").forEach(b=>b.addEventListener("click",()=>{catActiva=b.dataset.cat;renderFiltros();renderLista();}));
+  const tagEl=document.getElementById("filtrosTags");
+  tagEl.innerHTML=ETIQUETAS.map(t=>`<button class="chip-tag${tagsActivos.has(t)?" activo":""}" data-tag="${t}">${t}</button>`).join("");
+  tagEl.querySelectorAll(".chip-tag").forEach(b=>b.addEventListener("click",()=>{tagsActivos.has(b.dataset.tag)?tagsActivos.delete(b.dataset.tag):tagsActivos.add(b.dataset.tag);renderFiltros();renderLista();}));
+}
+
+function filtrarRecetas(){
+  return recetas.filter(r=>{
+    if(catActiva!=="Todas"&&r.categoria!==catActiva)return false;
+    if(tagsActivos.size>0){const tags=r.etiquetas||[];if(![...tagsActivos].every(t=>tags.includes(t)))return false;}
+    if(busquedaVal){const q=busquedaVal.toLowerCase();const enN=(r.nombre||"").toLowerCase().includes(q);const enI=(r.ingredientes||[]).some(i=>i.nombre?.toLowerCase().includes(q));if(!enN&&!enI)return false;}
+    return true;
+  });
+}
+
+function renderLista(){
+  const lista=document.getElementById("listaRecetas");
+  const filtradas=filtrarRecetas();
+  if(filtradas.length===0){
+    lista.innerHTML=`<div class="empty"><div class="empty-icon">🍲</div><div class="empty-title">${recetas.length===0?"El catálogo está vacío":"Sin resultados"}</div><div class="empty-sub">${recetas.length===0?"Agregá tu primera receta con el botón +":"Probá con otros filtros"}</div></div>`;
+    return;
+  }
+  lista.innerHTML=filtradas.map(r=>{
+    const esFav=favs[r.id];
+    const fc=r.fuente==="oficial"?"fuente-oficial":r.fuente==="app"?"fuente-app":"fuente-comunidad";
+    return`<div class="receta-card" data-id="${r.id}"><div class="receta-card-body"><div class="receta-cat">${r.categoria||""} <span class="fuente-badge ${fc}">${r.fuente||"app"}</span></div><div class="receta-nombre">${r.nombre}</div><div class="receta-meta">${r.comensales_base?`<span>👥 ${r.comensales_base}</span>`:""} ${r.duracion_min?`<span>⏱ ${r.duracion_min} min</span>`:""} ${(r.etiquetas||[]).slice(0,2).map(t=>`<span>${t}</span>`).join("")}<button class="fav-btn" data-id="${r.id}">${esFav?"❤️":"🤍"}</button></div></div></div>`;
+  }).join("");
+  lista.querySelectorAll(".receta-card").forEach(card=>{card.addEventListener("click",e=>{if(e.target.classList.contains("fav-btn"))return;abrirDetalle(card.dataset.id);});});
+  lista.querySelectorAll(".fav-btn").forEach(btn=>{btn.addEventListener("click",()=>toggleFav(btn.dataset.id));});
+}
+
+function toggleFav(id){favs[id]=!favs[id];localStorage.setItem("favs",JSON.stringify(favs));renderLista();toast(favs[id]?"Guardado en favoritos":"Quitado de favoritos");}
+
+function formatSeg(seg){if(!seg)return"—";if(seg<60)return`${seg}s`;const m=Math.floor(seg/60),s=seg%60;if(m<60)return s?`${m}m ${s}s`:`${m}m`;const h=Math.floor(m/60),rm=m%60;return`${h}h ${rm?rm+"m":""}`;}
+function escalarCant(val,f){if(val==null)return null;const r=val*f;return Number.isInteger(r)?r:Math.round(r*10)/10;}
+
+function abrirDetalle(id){recetaActual=recetas.find(r=>r.id===id);if(!recetaActual)return;factorActual=1;renderDetalle();document.getElementById("overlayDetalle").classList.add("visible");}
+
+function renderDetalle(){
+  const r=recetaActual,f=factorActual;
+  const comActual=r.comensales_base?Math.round(r.comensales_base*f):null;
+  const ingHTML=(r.ingredientes||[]).map(ing=>{const cant=escalarCant(ing.cantidad,f);const cs=cant!=null?`${cant}${ing.unidad?" "+ing.unidad:""}`:""
+    ;return`<div class="ing-row"><div class="ing-dot"></div><span class="ing-cant">${cs}</span><span>${ing.nombre}</span></div>`;}).join("");
+  const pasosHTML=(r.pasos||[]).map(p=>{
+    const tp=p.velocidad!=null||p.temperatura_c!=null||p.tiempo_seg!=null;
+    const esR=p.instruccion?.toLowerCase().match(/reduc|espesa|evapora/);
+    const esD=p.temperatura_c>=100&&!esR&&(p.tiempo_seg||999)<600&&p.velocidad<=2;
+    const esC=p.temperatura_c>=100&&p.velocidad<=2&&(p.tiempo_seg||0)>=600;
+    let av="";
+    if(f!==1){if(esC)av=`<div class="aviso-tiempo">⚠️ La rampa de calentamiento puede ser mayor. Vigilá la temperatura.</div>`;
+    else if(esR)av=`<div class="aviso-tiempo">⚠️ Las reducciones escalan lento. Controlá a ojo.</div>`;
+    else if(esD&&f>1)av=`<div class="aviso-tiempo">⚠️ Para dorar bien, hacé el sofrito en tandas.</div>`;}
+    return`<div class="paso-card"><div class="paso-texto"><div class="paso-num">${p.numero}</div><div class="paso-instr">${p.instruccion}</div></div>${tp?`<div class="paso-params"><div class="param-item"><div class="param-label">Velocidad</div><div class="param-val">${p.velocidad??"—"}</div></div><div class="param-item"><div class="param-label">Temperatura</div><div class="param-val">${p.temperatura_c!=null?p.temperatura_c+" °C":"—"}</div></div><div class="param-item"><div class="param-label">Control Tª</div><div class="param-val">${p.control_ta??"—"}</div></div><div class="param-item"><div class="param-label">Tiempo</div><div class="param-val">${formatSeg(p.tiempo_seg)}</div></div><div class="param-item"><div class="param-label">Turbo</div><div class="param-val">${p.turbo===true?"ON":p.turbo===false?"OFF":"—"}</div></div></div>`:""} ${av}</div>`;
+  }).join("");
+  const factores=[0.5,0.75,1,1.5,2];
+  document.getElementById("modalDetalle").innerHTML=`<div class="modal-handle"></div><div class="modal-header"><div class="modal-cat">${r.categoria||""}</div><div class="modal-nombre">${r.nombre}</div><div class="modal-meta">${comActual?`<span>👥 ${comActual} raciones</span>`:""} ${r.duracion_min?`<span>⏱ ${r.duracion_min} min</span>`:""}</div></div><div class="modal-section"><div class="escalado-row"><span class="escalado-label">Escalar</span><div class="escalado-btns">${factores.map(fv=>`<button class="btn-factor${f===fv?" activo":""}" data-f="${fv}">×${fv}</button>`).join("")}</div></div></div><div class="modal-section"><div class="modal-section-title">Ingredientes</div>${ingHTML||'<p style="font-size:13px;color:var(--muted)">Sin ingredientes</p>'}</div><div class="modal-section" style="margin-top:16px"><div class="modal-section-title">Pasos</div>${pasosHTML||'<p style="font-size:13px;color:var(--muted)">Sin pasos</p>'}</div>${r.notas?`<div class="modal-section" style="margin-top:8px"><div style="background:var(--green-lt);border-left:3px solid var(--green);padding:10px 14px;border-radius:0 8px 8px 0;font-size:13px"><strong>Notas:</strong> ${r.notas}</div></div>`:""}<div style="height:20px"></div>`;
+  document.getElementById("modalDetalle").querySelectorAll(".btn-factor").forEach(b=>b.addEventListener("click",()=>{factorActual=parseFloat(b.dataset.f);renderDetalle();}));
+}
+
+document.getElementById("overlayDetalle").addEventListener("click",e=>{if(e.target===document.getElementById("overlayDetalle"))document.getElementById("overlayDetalle").classList.remove("visible");});
+document.getElementById("fabAgregar").addEventListener("click",()=>{if(!usuario){toast("Entrá con Google para agregar recetas");return;}document.getElementById("overlayAgregar").classList.add("visible");});
+document.getElementById("btnCancelarAgregar").addEventListener("click",cerrarAgregar);
+document.getElementById("overlayAgregar").addEventListener("click",e=>{if(e.target===document.getElementById("overlayAgregar"))cerrarAgregar();});
+
+function cerrarAgregar(){document.getElementById("overlayAgregar").classList.remove("visible");imagenesSeleccionadas=[];document.getElementById("previewsAgregar").innerHTML="";document.getElementById("dropLabel").textContent="Seleccioná las capturas";document.getElementById("btnExtraer").disabled=true;document.getElementById("inputImagenes").value="";}
+
+document.getElementById("inputImagenes").addEventListener("change",e=>{
+  const files=Array.from(e.target.files).slice(0,4);imagenesSeleccionadas=files;
+  document.getElementById("dropLabel").textContent=`${files.length} imagen${files.length>1?"es":""} seleccionada${files.length>1?"s":""}`;
+  document.getElementById("dropZone").classList.toggle("activo",files.length>0);
+  document.getElementById("previewsAgregar").innerHTML=files.map(f=>`<img src="${URL.createObjectURL(f)}" alt="">`).join("");
+  document.getElementById("btnExtraer").disabled=files.length===0;
+});
+
+document.getElementById("btnExtraer").addEventListener("click",async()=>{
+  if(!imagenesSeleccionadas.length||!usuario)return;
+  const btn=document.getElementById("btnExtraer");btn.disabled=true;btn.textContent="Extrayendo…";
+  try{
+    const imgs=await Promise.all(imagenesSeleccionadas.map(async f=>({type:"image",source:{type:"base64",media_type:f.type,data:await toBase64(f)}})));
+    const res=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-6",max_tokens:1000,system:`Extractor de recetas Mambo. Devolvé SOLO JSON válido sin backticks:\n{"nombre":"string","categoria_app":"string","comensales_base":number|null,"duracion_min":number|null,"ingredientes":[{"cantidad":number|null,"unidad":"string|null","nombre":"string"}],"pasos":[{"numero":number,"instruccion":"string","velocidad":number|null,"temperatura_c":number|null,"control_ta":number|null,"tiempo_seg":number|null,"turbo":boolean|null}],"notas":"string|null"}\nHH:MM:SS→segundos. No dupliques ingredientes.`,messages:[{role:"user",content:[...imgs,{type:"text",text:"Extraé la receta."}]}]})});
+    const data=await res.json();if(!res.ok)throw new Error(data.error?.message);
+    let raw=data.content[0].text.trim().replace(/^```[a-z]*\n?/,"").replace(/\n?```$/,"");
+    const ex=JSON.parse(raw);
+    await addDoc(collection(db,"recetas"),{nombre:ex.nombre||"Sin nombre",categoria:ex.categoria_app||"Sin categoría",comensales_base:ex.comensales_base||null,duracion_min:ex.duracion_min||null,ingredientes:ex.ingredientes||[],pasos:ex.pasos||[],notas:ex.notas||null,etiquetas:[],fuente:"app",agregada_por:usuario.email,agregada_en:new Date().toISOString()});
+    toast("Receta guardada ✓");cerrarAgregar();await cargarRecetas();
+  }catch(e){toast("Error: "+e.message);btn.disabled=false;btn.textContent="Extraer y guardar receta";}
+});
+
+function toBase64(file){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(",")[1]);r.onerror=rej;r.readAsDataURL(file);});}
+
+document.getElementById("busqueda").addEventListener("input",e=>{busquedaVal=e.target.value.trim();renderLista();});
+
+function toast(msg){const el=document.getElementById("toast");el.textContent=msg;el.classList.add("visible");setTimeout(()=>el.classList.remove("visible"),2500);}
+
+renderFiltros();
+cargarRecetas();
+</script>
+</body>
+</html>
