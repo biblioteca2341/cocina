@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
+<!-- saved from url=(0045)file:///C:/Users/GCBA/Downloads/cocina_6.html -->
+<html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cocina Mambo</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="./cocina_files/css2" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#FAF7F2;--surface:#F0EBE3;--border:#DDD5C8;--text:#2C2016;--muted:#8A7A6E;--accent:#C4622D;--accent-lt:#F0D9CC;--green:#5E8A62;--green-lt:#DCE9DC;--dark:#1a1a2e;--teal:#4dd0e1}
@@ -85,16 +85,16 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 <body>
 <header class="header">
   <div class="header-title">Cocina Mambo</div>
-  <button class="btn-login" id="btnLogin"><span>🔑</span><span id="loginLabel">Entrar con Google</span></button>
+  <button class="btn-login" id="btnLogin"><span>🔑</span><span>Entrar con Google</span></button>
 </header>
 <main class="main">
   <div class="search-wrap">
     <span class="search-icon">🔍</span>
     <input class="search-input" id="busqueda" type="text" placeholder="Buscar receta o ingrediente…">
   </div>
-  <div class="filtros-cat" id="filtrosCat"></div>
-  <div class="filtros-tags" id="filtrosTags"></div>
-  <div id="listaRecetas"><div class="loading">Cargando recetas…</div></div>
+  <div class="filtros-cat" id="filtrosCat"><button class="chip-cat activo" data-cat="Todas">Todas</button><button class="chip-cat" data-cat="Básicos">Básicos</button><button class="chip-cat" data-cat="Sopas y cremas">Sopas y cremas</button><button class="chip-cat" data-cat="Salsas">Salsas</button><button class="chip-cat" data-cat="Untables">Untables</button><button class="chip-cat" data-cat="Entrantes">Entrantes</button><button class="chip-cat" data-cat="Legumbres">Legumbres</button><button class="chip-cat" data-cat="Arroces">Arroces</button><button class="chip-cat" data-cat="Pastas">Pastas</button><button class="chip-cat" data-cat="Verduras">Verduras</button><button class="chip-cat" data-cat="Carnes">Carnes</button><button class="chip-cat" data-cat="Pescados">Pescados</button><button class="chip-cat" data-cat="Huevos">Huevos</button><button class="chip-cat" data-cat="Masas y panes">Masas y panes</button><button class="chip-cat" data-cat="Postres">Postres</button><button class="chip-cat" data-cat="Desayunos">Desayunos</button><button class="chip-cat" data-cat="Bebidas">Bebidas</button></div>
+  <div class="filtros-tags" id="filtrosTags"><button class="chip-tag" data-tag="vegetariano">vegetariano</button><button class="chip-tag" data-tag="vegano">vegano</button><button class="chip-tag" data-tag="sin gluten">sin gluten</button><button class="chip-tag" data-tag="kosher">kosher</button><button class="chip-tag" data-tag="rápido">rápido</button><button class="chip-tag" data-tag="batch cooking">batch cooking</button><button class="chip-tag" data-tag="congelable">congelable</button></div>
+  <div id="listaRecetas"><div class="empty"><div class="empty-icon">🍲</div><div class="empty-title">El catálogo está vacío</div><div class="empty-sub">Agregá tu primera receta con el botón +</div></div></div>
 </main>
 <button class="fab" id="fabAgregar" title="Agregar receta">+</button>
 <div class="toast" id="toast"></div>
@@ -102,16 +102,16 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 <div class="overlay" id="overlayAgregar">
   <div class="modal-agregar" id="modalAgregar">
     <div class="modal-handle"></div>
-    <h2 style="font-family:'Playfair Display',serif;font-size:20px;margin-bottom:16px;">Agregar receta</h2>
+    <h2 style="font-family:&#39;Playfair Display&#39;,serif;font-size:20px;margin-bottom:16px;">Agregar receta</h2>
     <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">Subí las capturas de la app Mambo (ingredientes + pasos)</p>
     <label class="drop-zone" id="dropZone">
-      <input type="file" accept="image/*" multiple id="inputImagenes" style="display:none">
+      <input type="file" accept="image/*" multiple="" id="inputImagenes" style="display:none">
       <div style="font-size:32px;margin-bottom:8px;">📷</div>
       <div style="font-weight:600;font-size:14px;" id="dropLabel">Seleccioná las capturas</div>
       <div style="font-size:12px;color:var(--muted);margin-top:4px;">Hasta 4 imágenes</div>
     </label>
     <div class="previews" id="previewsAgregar"></div>
-    <button class="btn-primario" id="btnExtraer" disabled>Extraer y guardar receta</button>
+    <button class="btn-primario" id="btnExtraer" disabled="">Extraer y guardar receta</button>
     <button class="btn-secundario" id="btnCancelarAgregar">Cancelar</button>
   </div>
 </div>
@@ -119,7 +119,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import{getFirestore,collection,getDocs,addDoc,query,orderBy}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import{getAuth,signInWithPopup,GoogleAuthProvider,signOut,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import{getAuth,signInWithPopup,signInWithRedirect,getRedirectResult,GoogleAuthProvider,signOut,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 const firebaseConfig={apiKey:"AIzaSyAbN7TfbV6iXk1rmjJjsJuiM-XrwrCCT6Q",authDomain:"cocina-2d808.firebaseapp.com",projectId:"cocina-2d808",storageBucket:"cocina-2d808.firebasestorage.app",messagingSenderId:"537487557158",appId:"1:537487557158:web:3f8c1ee652c13d47541ce7"};
 const app=initializeApp(firebaseConfig);
@@ -141,7 +141,7 @@ onAuthStateChanged(auth,u=>{
 
 document.getElementById("btnLogin").addEventListener("click",async()=>{
   if(usuario){await signOut(auth);}
-  else{try{await signInWithPopup(auth,provider);}catch(e){console.error(e);}}
+  else{try{await signInWithRedirect(auth,provider);}catch(e){console.error(e);}}
 });
 
 async function cargarRecetas(){
@@ -250,8 +250,10 @@ document.getElementById("busqueda").addEventListener("input",e=>{busquedaVal=e.t
 
 function toast(msg){const el=document.getElementById("toast");el.textContent=msg;el.classList.add("visible");setTimeout(()=>el.classList.remove("visible"),2500);}
 
+getRedirectResult(auth).then(r=>{if(r&&r.user)toast("Bienvenid@ "+r.user.displayName?.split(" ")[0])}).catch(()=>{});
 renderFiltros();
 cargarRecetas();
 </script>
-</body>
-</html>
+
+
+</body></html>
