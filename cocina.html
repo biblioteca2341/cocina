@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cocina — Mambo 12090</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@400;500;600&family=Courier+Prime&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg: #FAF7F2;
@@ -19,7 +21,7 @@
         }
 
         @media (prefers-color-scheme: dark) {
-            :root {
+            :root:not([data-theme="light"]) {
                 --bg: #1A1410;
                 --surface: #2C2419;
                 --border: #4A423A;
@@ -31,6 +33,19 @@
                 --blue: #6BA3D4;
                 --blue-lt: #1F3A5C;
             }
+        }
+
+        :root[data-theme="dark"] {
+            --bg: #1A1410;
+            --surface: #2C2419;
+            --border: #4A423A;
+            --text: #F5EFE6;
+            --accent: #E8945D;
+            --accent-lt: #5C3B25;
+            --green: #8FBB7E;
+            --green-lt: #2D4125;
+            --blue: #6BA3D4;
+            --blue-lt: #1F3A5C;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -71,28 +86,30 @@
 
         .filter-row {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             flex-wrap: wrap;
             align-items: center;
         }
 
         .filter-label {
             font-weight: 600;
-            font-size: 0.85rem;
-            opacity: 0.7;
-            min-width: 80px;
+            font-size: 0.82rem;
+            opacity: 0.65;
+            min-width: 72px;
+            flex-shrink: 0;
         }
 
         .filter-btn {
-            padding: 7px 14px;
+            padding: 6px 14px;
             border: 2px solid var(--border);
             background-color: var(--bg);
             color: var(--text);
             border-radius: 6px;
             cursor: pointer;
-            font-size: 0.875rem;
+            font-size: 0.85rem;
             font-family: inherit;
-            transition: all 0.2s;
+            transition: all 0.15s;
+            white-space: nowrap;
         }
 
         .filter-btn:hover { border-color: var(--accent); }
@@ -146,7 +163,7 @@
 
         .receta-title {
             font-family: 'Playfair Display', Georgia, serif;
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             margin-bottom: 10px;
             line-height: 1.3;
         }
@@ -162,7 +179,7 @@
             display: inline-block;
             padding: 3px 8px;
             border-radius: 4px;
-            font-size: 0.75rem;
+            font-size: 0.74rem;
             font-weight: 600;
             background-color: var(--accent-lt);
             color: var(--accent);
@@ -174,7 +191,7 @@
         .receta-meta {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 6px;
+            gap: 5px;
             font-size: 0.82rem;
             opacity: 0.7;
         }
@@ -196,7 +213,7 @@
             padding: 8px 12px;
             background-color: var(--bg);
             border-radius: 6px;
-            font-size: 0.85rem;
+            font-size: 0.84rem;
             opacity: 0.85;
         }
 
@@ -204,12 +221,12 @@
 
         .ingredientes-list h4,
         .pasos-list h4 {
-            font-size: 0.9rem;
+            font-size: 0.82rem;
             font-weight: 600;
             margin-bottom: 8px;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            opacity: 0.6;
+            letter-spacing: 0.06em;
+            opacity: 0.55;
         }
 
         .ingredientes-list ul { list-style: none; }
@@ -217,10 +234,14 @@
         .ingredientes-list li {
             padding: 3px 0;
             font-size: 0.9rem;
-            opacity: 0.85;
+            opacity: 0.88;
         }
 
-        .ingrediente-cantidad { font-weight: 600; color: var(--accent); }
+        .ingrediente-cantidad {
+            font-weight: 600;
+            color: var(--accent);
+            font-family: 'Courier Prime', monospace;
+        }
 
         .escalado-controls {
             display: flex;
@@ -243,6 +264,7 @@
             font-size: 1rem;
             line-height: 1;
             transition: all 0.15s;
+            flex-shrink: 0;
         }
 
         .escalado-btn:hover:not(:disabled) {
@@ -253,7 +275,7 @@
 
         .escalado-btn:disabled { opacity: 0.35; cursor: not-allowed; }
 
-        .comensales-display { font-size: 0.88rem; min-width: 90px; }
+        .comensales-display { font-size: 0.88rem; }
 
         .aviso-tiempo {
             display: none;
@@ -261,6 +283,7 @@
             opacity: 0.6;
             font-style: italic;
             margin-top: 4px;
+            line-height: 1.4;
         }
 
         .aviso-tiempo.visible { display: block; }
@@ -270,8 +293,8 @@
         .pasos-list li {
             padding: 3px 0;
             font-size: 0.9rem;
-            opacity: 0.85;
-            line-height: 1.45;
+            opacity: 0.88;
+            line-height: 1.5;
         }
 
         .empty-state {
@@ -286,6 +309,178 @@
             opacity: 0.55;
             margin-bottom: 16px;
         }
+
+        .observaciones-list {
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px dashed var(--border);
+        }
+
+        .observaciones-list h4 {
+            font-size: 0.82rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            opacity: 0.55;
+        }
+
+        .observaciones-list ul { list-style: none; }
+
+        .observaciones-list li {
+            padding: 3px 0;
+            font-size: 0.85rem;
+            opacity: 0.8;
+            line-height: 1.4;
+        }
+
+        .video-link {
+            margin-top: 12px;
+        }
+
+        .video-link a {
+            color: var(--accent);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .video-link a:hover { text-decoration: underline; }
+
+        .modo-toggle {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+        .modo-btn {
+            padding: 8px 20px;
+            border: 2px solid var(--border);
+            background-color: var(--surface);
+            color: var(--text);
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.88rem;
+            font-weight: 600;
+            font-family: inherit;
+            transition: all 0.15s;
+        }
+
+        .modo-btn.active {
+            background-color: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+        }
+
+        .que-tengo-panel {
+            display: none;
+            background-color: var(--surface);
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            margin-bottom: 24px;
+        }
+
+        .que-tengo-panel.visible { display: block; }
+
+        .chips-input-wrap {
+            position: relative;
+        }
+
+        .chips-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding: 8px;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            background-color: var(--bg);
+            min-height: 44px;
+            align-items: center;
+        }
+
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            background-color: var(--accent-lt);
+            color: var(--accent);
+            border-radius: 14px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .chip-remove {
+            cursor: pointer;
+            font-weight: bold;
+            opacity: 0.7;
+        }
+
+        .chip-remove:hover { opacity: 1; }
+
+        .chips-input {
+            border: none;
+            background: transparent;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 0.9rem;
+            outline: none;
+            flex: 1;
+            min-width: 120px;
+            padding: 4px;
+        }
+
+        .suggestions {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            margin-top: 4px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 10;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        }
+
+        .suggestions.visible { display: block; }
+
+        .suggestion-item {
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 0.88rem;
+        }
+
+        .suggestion-item:hover,
+        .suggestion-item.highlighted {
+            background-color: var(--accent-lt);
+            color: var(--accent);
+        }
+
+        .cobertura-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .cobertura-badge.completa { background-color: var(--green-lt); color: var(--green); }
+        .cobertura-badge.parcial { background-color: var(--accent-lt); color: var(--accent); }
+
+        .faltantes-list {
+            font-size: 0.8rem;
+            opacity: 0.75;
+            margin-bottom: 12px;
+        }
+
+        .faltantes-list strong { opacity: 1; }
     </style>
 </head>
 <body>
@@ -295,6 +490,21 @@
     </header>
 
     <div class="container">
+        <div class="modo-toggle">
+            <button class="modo-btn active" id="modoCatalogo">📖 Catálogo</button>
+            <button class="modo-btn" id="modoQueTengo">🥕 ¿Qué tengo?</button>
+        </div>
+
+        <div class="que-tengo-panel" id="queTengoPanel">
+            <div class="filter-label" style="margin-bottom: 8px;">Ingredientes disponibles</div>
+            <div class="chips-input-wrap">
+                <div class="chips-container" id="chipsContainer">
+                    <input type="text" class="chips-input" id="ingredienteInput" placeholder="Escribí un ingrediente…">
+                </div>
+                <div class="suggestions" id="suggestions"></div>
+            </div>
+        </div>
+
         <div class="filters">
             <div class="filter-row">
                 <span class="filter-label">Categoría</span>
@@ -320,327 +530,24 @@
     </div>
 
     <script>
-        const RECETAS = [
-            {
-                id: 1, nombre: "Huevos batidos", funcion: "Batir", categoria: "Postres",
-                comensales_base: 4, comensales_max: 6, duracion: "10 min", dificultad: "Fácil",
-                kosher: true, jarra: "habana", jarra_razon: "Usa mariposa sobre las cuchillas para batir",
-                fuente: "oficial", fuente_nombre: "Cecotec",
-                ingredientes: [
-                    { cantidad: "6", unidad: "unidades", nombre: "huevos" }
-                ],
-                pasos: [
-                    "Introducimos los huevos cascados en el interior de la jarra.",
-                    "Colocamos la mariposa en su posición sobre las cuchillas.",
-                    "Programamos la velocidad 3 durante 3 minutos para batirlos."
-                ]
-            },
-            {
-                id: 2, nombre: "Masa de crepes", funcion: "Batir", categoria: "Panificados",
-                comensales_base: 8, comensales_max: 8, duracion: "45 min", dificultad: "Fácil",
-                kosher: true, jarra: "habana", jarra_razon: "Usa mariposa para mezclar la masa",
-                fuente: "oficial", fuente_nombre: "Cecotec",
-                ingredientes: [
-                    { cantidad: "250", unidad: "g", nombre: "harina de repostería" },
-                    { cantidad: "500", unidad: "ml", nombre: "leche" },
-                    { cantidad: "2", unidad: "unidades", nombre: "huevos" },
-                    { cantidad: "1", unidad: "cucharada", nombre: "aceite de oliva virgen extra" },
-                    { cantidad: "1", unidad: "pellizco", nombre: "sal" }
-                ],
-                pasos: [
-                    "Vertemos todos los ingredientes en la jarra.",
-                    "Programamos 20 segundos a la velocidad 3.",
-                    "Dejamos reposar la masa un mínimo de 30 minutos antes de utilizarla."
-                ]
-            },
-            {
-                id: 3, nombre: "Crema de limón", funcion: "Batir", categoria: "Postres",
-                comensales_base: 4, comensales_max: 4, duracion: "15 min", dificultad: "Fácil",
-                kosher: true, jarra: "habana", jarra_razon: "Usa mariposa para mezclar y cocinar la crema",
-                fuente: "oficial", fuente_nombre: "Cecotec",
-                ingredientes: [
-                    { cantidad: "160", unidad: "g", nombre: "azúcar" },
-                    { cantidad: "60", unidad: "g", nombre: "mantequilla" },
-                    { cantidad: "2", unidad: "unidades", nombre: "limones (piel sin la parte blanca)" },
-                    { cantidad: "2", unidad: "unidades", nombre: "limones (zumo sin pepitas)" },
-                    { cantidad: "2", unidad: "unidades", nombre: "huevos" }
-                ],
-                pasos: [
-                    "Agregamos el azúcar en la jarra y lo pulverizamos.",
-                    "Añadimos las cáscaras de limón sin la parte blanca y las trituramos durante 15 segundos con la velocidad 9.",
-                    "Incorporamos la mantequilla a temperatura ambiente y el zumo de los limones y mezclamos a velocidad 2 durante 1 minuto.",
-                    "Vertemos los huevos y batimos a velocidad 4 durante 10 segundos.",
-                    "Cocinamos la mezcla a 80 ºC y velocidad 5 durante 7 minutos, potencia de calor 3.",
-                    "Introducimos la crema en un frasco y la conservamos en el frigorífico."
-                ]
-            },
-            {
-                id: 4, nombre: "Batido de fresa y plátano", funcion: "Batir", categoria: "Postres",
-                comensales_base: 4, comensales_max: 4, duracion: "10 min", dificultad: "Fácil",
-                kosher: true, jarra: "habana", jarra_razon: "Usa mariposa para batir frutas con líquidos",
-                fuente: "oficial", fuente_nombre: "Cecotec",
-                ingredientes: [
-                    { cantidad: "200", unidad: "g", nombre: "plátanos" },
-                    { cantidad: "200", unidad: "g", nombre: "fresas" },
-                    { cantidad: "100", unidad: "g", nombre: "azúcar" },
-                    { cantidad: "500", unidad: "ml", nombre: "leche" },
-                    { cantidad: "1", unidad: "unidad", nombre: "yogur natural o de plátano" }
-                ],
-                pasos: [
-                    "Lavamos las fresas y cortamos la parte de las hojas.",
-                    "Añadimos las fresas a la jarra junto con los plátanos, el yogur y el azúcar.",
-                    "Trituramos durante 3 minutos a velocidad progresiva de 5 a 10.",
-                    "Volvemos a programar 3 minutos a velocidad 3 e incorporamos la leche por la tapa."
-                ]
-            },
-            {
-                id: 5, nombre: "Nata montada", funcion: "Montar", categoria: "Postres",
-                comensales_base: 4, comensales_max: 6, duracion: "10 min", dificultad: "Fácil",
-                kosher: true, jarra: "habana", jarra_razon: "Usa mariposa para montar la nata",
-                fuente: "oficial", fuente_nombre: "Cecotec",
-                ingredientes: [
-                    { cantidad: "200", unidad: "g", nombre: "azúcar glas" },
-                    { cantidad: "500", unidad: "ml", nombre: "nata" }
-                ],
-                pasos: [
-                    "Vertemos la nata bien fría en la jarra, colocamos la mariposa.",
-                    "Programamos la velocidad 4.",
-                    "Cuando la nata esté montada, incorporaremos el azúcar glas con la espátula."
-                ]
-            },
-            {
-                id: 6, nombre: "Merengue suizo", funcion: "Montar", categoria: "Postres",
-                comensales_base: 4, comensales_max: 4, duracion: "10 min", dificultad: "Fácil",
-                kosher: true, jarra: "habana", jarra_razon: "Usa mariposa para montar las claras",
-                fuente: "oficial", fuente_nombre: "Cecotec",
-                ingredientes: [
-                    { cantidad: "200", unidad: "g", nombre: "azúcar glas" },
-                    { cantidad: "4", unidad: "unidades", nombre: "claras de huevo" },
-                    { cantidad: "1", unidad: "pellizco", nombre: "sal" },
-                    { cantidad: "unas gotas", unidad: "", nombre: "vinagre o zumo de limón" }
-                ],
-                pasos: [
-                    "Ponemos la mariposa en la jarra.",
-                    "Añadimos todos los ingredientes.",
-                    "Programamos 4 minutos a 50 ºC y velocidad 4.",
-                    "Si queremos un merengue más consistente, después de montarlo volveremos a programar otros 4 minutos a velocidad 4, sin temperatura."
-                ]
-            },
-            {
-                id: 7, nombre: "Nubes de fresa", funcion: "Montar", categoria: "Postres",
-                comensales_base: 8, comensales_max: 8, duracion: "30 min", dificultad: "Media",
-                kosher: true, jarra: "habana", jarra_razon: "Usa mariposa para mezclar y montar",
-                fuente: "oficial", fuente_nombre: "Cecotec",
-                ingredientes: [
-                    { cantidad: "200", unidad: "g", nombre: "azúcar" },
-                    { cantidad: "200", unidad: "ml", nombre: "agua" },
-                    { cantidad: "1", unidad: "sobre y una cucharada", nombre: "gelatina de fresa" },
-                    { cantidad: "2", unidad: "sobres", nombre: "gelatina neutra en polvo" },
-                    { cantidad: "al gusto", unidad: "", nombre: "azúcar glas para espolvorear" }
-                ],
-                pasos: [
-                    "Agregamos el agua, la gelatina neutra y el azúcar y mezclamos 10 segundos a velocidad 5.",
-                    "Programamos 5 minutos a 100 ºC y velocidad 2.",
-                    "Añadimos la gelatina de sabor y programamos la velocidad 5 durante 10 segundos.",
-                    "Luego programamos 5 minutos a 100 ºC y velocidad 2.",
-                    "Dejamos reposar la mezcla en la jarra durante una hora y media.",
-                    "Luego colocamos la mariposa en su posición y programamos 6 minutos a velocidad 4, sin temperatura.",
-                    "Vertemos la mezcla en un molde forrado con papel film y lo dejamos reposar durante unas 12 horas.",
-                    "Partimos las nubes en porciones y las pasamos por azúcar glas."
-                ]
-            },
-            {
-                id: 8, nombre: "Bizcocho", funcion: "Montar", categoria: "Panificados",
-                comensales_base: 10, comensales_max: 10, duracion: "1h 30 min", dificultad: "Media",
-                kosher: true, jarra: "habana", jarra_razon: "Usa mariposa para batir y mezclar la masa",
-                fuente: "oficial", fuente_nombre: "Cecotec",
-                ingredientes: [
-                    { cantidad: "100", unidad: "g", nombre: "azúcar" },
-                    { cantidad: "100", unidad: "g", nombre: "harina" },
-                    { cantidad: "4", unidad: "unidades", nombre: "huevos" },
-                    { cantidad: "un poco", unidad: "", nombre: "mantequilla y harina para untar el molde" },
-                    { cantidad: "1", unidad: "sobre", nombre: "levadura" }
-                ],
-                pasos: [
-                    "Colocamos la mariposa en su posición.",
-                    "Introducimos los huevos con el azúcar y programamos la velocidad 4 hasta que tripliquen su volumen.",
-                    "Agregamos la harina y programamos la velocidad 2 para mezclar.",
-                    "Cuando esté mezclado, lo vertemos en un molde previamente encamisado con la mantequilla y la harina.",
-                    "Lo horneamos a temperatura de horno estándar."
-                ]
-            },
-            {
-                id: 9, nombre: "Soufflé de queso", funcion: "Montar", categoria: "Postres",
-                comensales_base: 2, comensales_max: 2, duracion: "45 min", dificultad: "Media",
-                kosher: false, jarra: "habana", jarra_razon: "Usa mariposa para mezclar y cocinar",
-                fuente: "oficial", fuente_nombre: "Cecotec",
-                ingredientes: [
-                    { cantidad: "20", unidad: "g", nombre: "harina" },
-                    { cantidad: "15", unidad: "g", nombre: "mantequilla" },
-                    { cantidad: "50", unidad: "g", nombre: "queso gruyer rallado" },
-                    { cantidad: "35", unidad: "ml", nombre: "nata para cocinar" },
-                    { cantidad: "100", unidad: "ml", nombre: "leche" },
-                    { cantidad: "1", unidad: "unidad", nombre: "huevo" },
-                    { cantidad: "1", unidad: "yema", nombre: "yema de huevo" },
-                    { cantidad: "1", unidad: "pellizco", nombre: "nuez moscada" },
-                    { cantidad: "1", unidad: "pellizco", nombre: "sal" },
-                    { cantidad: "1", unidad: "pellizco", nombre: "pimienta" }
-                ],
-                pasos: [
-                    "Precalentamos el horno a 180 ºC.",
-                    "Colocamos la mariposa en su posición.",
-                    "Agregamos a la jarra el huevo, la yema, la harina, la leche, la mantequilla a temperatura ambiente, la nuez moscada, la sal y la pimienta.",
-                    "Programamos 2 minutos a 90 ºC y velocidad 3.",
-                    "Cuando finalice, añadimos el queso y la nata y mezclamos 10 segundos a velocidad 4.",
-                    "Untamos mantequilla y espolvoreamos harina en 2 moldes de soufflé.",
-                    "Vertemos el contenido de la jarra y horneamos durante unos 25 minutos."
-                ]
-            },
-            {
-                id: 10, nombre: "Gazpacho", funcion: "Triturar", categoria: "Sopas y cremas",
-                comensales_base: 6, comensales_max: 6, duracion: "10 min", dificultad: "Fácil",
-                kosher: true, jarra: "acero", jarra_razon: "Usa cuchillas para triturar verduras",
-                fuente: "oficial", fuente_nombre: "Cecotec",
-                ingredientes: [
-                    { cantidad: "1", unidad: "kg", nombre: "tomates maduros con piel" },
-                    { cantidad: "50", unidad: "g", nombre: "pimiento verde" },
-                    { cantidad: "50", unidad: "g", nombre: "pimiento rojo" },
-                    { cantidad: "40", unidad: "g", nombre: "cebolla" },
-                    { cantidad: "70", unidad: "g", nombre: "pepino pelado" },
-                    { cantidad: "30", unidad: "ml", nombre: "vinagre" },
-                    { cantidad: "50", unidad: "ml", nombre: "aceite de oliva virgen extra" },
-                    { cantidad: "250", unidad: "ml", nombre: "agua" },
-                    { cantidad: "2", unidad: "dientes", nombre: "ajo" },
-                    { cantidad: "al gusto", unidad: "", nombre: "sal" }
-                ],
-                pasos: [
-                    "Introducimos todos los ingredientes previamente troceados.",
-                    "Programamos la velocidad 5 durante 20 segundos.",
-                    "Bajamos los restos de la pared de la jarra.",
-                    "Programamos la velocidad 10 durante 3 minutos."
-                ]
-            },
-            {
-                id: 11, nombre: "Lentejas con jamón", funcion: "Mezclar", categoria: "Carnes",
-                comensales_base: 6, comensales_max: 6, duracion: "10 min", dificultad: "Fácil",
-                kosher: false, jarra: "habana", jarra_razon: "Usa mariposa para remover",
-                fuente: "oficial", fuente_nombre: "Cecotec",
-                ingredientes: [
-                    { cantidad: "350", unidad: "g", nombre: "lentejas remojadas" },
-                    { cantidad: "125", unidad: "g", nombre: "jamón a tacos" },
-                    { cantidad: "750", unidad: "ml", nombre: "agua" },
-                    { cantidad: "1", unidad: "unidad", nombre: "tomate" },
-                    { cantidad: "1", unidad: "unidad", nombre: "pimiento verde" },
-                    { cantidad: "1/2", unidad: "unidad", nombre: "cebolla" },
-                    { cantidad: "3", unidad: "dientes", nombre: "ajo" },
-                    { cantidad: "1", unidad: "cucharada", nombre: "pimentón" },
-                    { cantidad: "1", unidad: "unidad", nombre: "zanahoria" },
-                    { cantidad: "1", unidad: "pastilla", nombre: "caldo de verduras" },
-                    { cantidad: "1", unidad: "hoja", nombre: "laurel" },
-                    { cantidad: "al gusto", unidad: "", nombre: "aceite de oliva" },
-                    { cantidad: "al gusto", unidad: "", nombre: "sal" }
-                ],
-                pasos: [
-                    "Troceamos los ajos, el tomate, la zanahoria, el pimiento verde y la cebolla.",
-                    "Colocamos la mariposa en su posición sobre la cuchilla, agregamos un poco de aceite.",
-                    "Programamos a 110 ºC y velocidad 1 durante 8 minutos.",
-                    "Al finalizar, agregamos el resto de los ingredientes.",
-                    "Programamos 25 minutos a 100 ºC y velocidad 1."
-                ]
-            },
-            {
-                id: 12, nombre: "Masa de pizza", funcion: "Amasar", categoria: "Panificados",
-                comensales_base: 2, comensales_max: 2, duracion: "10 min", dificultad: "Fácil",
-                kosher: true, jarra: "habana", jarra_razon: "Usa cuchara MamboMix para amasar",
-                fuente: "oficial", fuente_nombre: "Cecotec",
-                ingredientes: [
-                    { cantidad: "20", unidad: "g", nombre: "levadura prensada fresca de panadería" },
-                    { cantidad: "400", unidad: "g", nombre: "harina (preferiblemente de fuerza)" },
-                    { cantidad: "200", unidad: "ml", nombre: "agua" },
-                    { cantidad: "50", unidad: "ml", nombre: "aceite de oliva virgen extra" },
-                    { cantidad: "1", unidad: "cucharadita", nombre: "sal" }
-                ],
-                pasos: [
-                    "Cambiamos las cuchillas por la cuchara MamboMix.",
-                    "Vertemos todos los ingredientes en la jarra.",
-                    "Programamos la velocidad 3 durante 8 minutos.",
-                    "Dejamos reposar la masa en un lugar cálido hasta que doble su volumen."
-                ]
-            },
-            {
-                id: 13, nombre: "Crema catalana", funcion: "Remover", categoria: "Postres",
-                comensales_base: 4, comensales_max: 4, duracion: "20 min", dificultad: "Fácil",
-                kosher: true, jarra: "habana", jarra_razon: "Usa mariposa para remover y cocinar",
-                fuente: "oficial", fuente_nombre: "Cecotec",
-                ingredientes: [
-                    { cantidad: "50", unidad: "g", nombre: "azúcar" },
-                    { cantidad: "20", unidad: "g", nombre: "maicena" },
-                    { cantidad: "1/2", unidad: "litro", nombre: "leche" },
-                    { cantidad: "3", unidad: "unidades", nombre: "yemas" },
-                    { cantidad: "1", unidad: "rama", nombre: "canela" },
-                    { cantidad: "1", unidad: "unidad", nombre: "piel de limón" },
-                    { cantidad: "al gusto", unidad: "", nombre: "azúcar para quemar" }
-                ],
-                pasos: [
-                    "Vertemos la leche en la jarra junto con la canela y la piel de limón.",
-                    "Programamos a 80 ºC y velocidad 1 durante 10 minutos para que se remueva.",
-                    "Colamos la leche y la volvemos a introducir en la jarra.",
-                    "Añadimos el resto de los ingredientes.",
-                    "Removemos a velocidad 3 y 70 ºC, potencia de calor 4, hasta que la crema se espese.",
-                    "Vertemos la crema en los recipientes, la tapamos con film.",
-                    "Guardamos en el frigorífico al menos 4 horas.",
-                    "Servimos con azúcar espolvoreado por encima y lo quemamos con un soplete."
-                ]
-            },
-            {
-                id: 14, nombre: "Trocear verduras", funcion: "Trocear", categoria: "Verduras y arroces",
-                comensales_base: 4, comensales_max: 4, duracion: "5 min", dificultad: "Fácil",
-                kosher: true, jarra: "acero", jarra_razon: "Usa cuchillas para trocear verduras",
-                fuente: "oficial", fuente_nombre: "Cecotec",
-                ingredientes: [
-                    { cantidad: "1", unidad: "unidad", nombre: "pimiento rojo" },
-                    { cantidad: "1", unidad: "unidad", nombre: "pimiento verde" },
-                    { cantidad: "1", unidad: "unidad", nombre: "cebolla" }
-                ],
-                pasos: [
-                    "Pelamos la cebolla, cortamos todas las verduras en cuartos.",
-                    "Las agregamos a la jarra sin sobrepasar la medida de 1 litro.",
-                    "Programamos la velocidad 4 durante 4 segundos.",
-                    "Al finalizar, si queremos que el resultado sea más pequeño bajamos los restos de la pared de la jarra y volveremos a programar la velocidad 4 durante 4 segundos más."
-                ]
-            },
-            {
-                id: 15, nombre: "Picada de ajo y perejil", funcion: "Picar", categoria: "Salsas y aderezos",
-                comensales_base: 4, comensales_max: 4, duracion: "5 min", dificultad: "Fácil",
-                kosher: true, jarra: "acero", jarra_razon: "Usa cuchillas para picar hierbas y ajo",
-                fuente: "oficial", fuente_nombre: "Cecotec",
-                ingredientes: [
-                    { cantidad: "1", unidad: "manojo", nombre: "perejil" },
-                    { cantidad: "2", unidad: "unidades", nombre: "ajos" },
-                    { cantidad: "variable", unidad: "ml", nombre: "aceite de oliva" }
-                ],
-                pasos: [
-                    "Deshojamos el manojo de perejil.",
-                    "Introducimos las hojas de perejil y los ajos troceados en la jarra.",
-                    "Programamos la velocidad 6 durante 15 segundos.",
-                    "Bajamos las hojas que se hayan quedado en las paredes.",
-                    "Volvemos a programar la velocidad 6 durante 15 segundos más.",
-                    "Conservamos en aceite de oliva."
-                ]
-            }
-        ];
+const RECETAS = [{"categoria": "Postres", "nombre": "Huevos batidos", "ingredientes": [{"cantidad": "6", "unidad": "unidades", "nombre": "huevos"}], "kosher": true, "id": 1, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Batir", "comensales_base": 2, "jarra": "habana", "pasos": ["Mariposa en cuchillas.", "Huevos cascados.", "Batir vel 3, 3 min."], "jarra_razon": "Usa mariposa o MamboMix para batir", "dificultad": "Fácil", "fuente": "oficial", "duracion": "3 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Panificados", "nombre": "Masa de crepes", "ingredientes": [{"cantidad": "250", "unidad": "g", "nombre": "harina de repostería"}, {"cantidad": "500", "unidad": "ml", "nombre": "leche"}, {"cantidad": "2", "unidad": "unidades", "nombre": "huevos"}, {"cantidad": "1", "unidad": "cucharada", "nombre": "aceite de oliva virgen extra"}, {"cantidad": "1", "unidad": "pellizco", "nombre": "sal"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "mantequilla"}], "kosher": true, "id": 2, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 10, "funcion": "Batir", "comensales_base": 8, "jarra": "habana", "pasos": ["Verter todos ingredientes.", "Programar 20 seg vel.", "Reposar 30 min."], "jarra_razon": "Usa mariposa o MamboMix para batir", "dificultad": "Fácil", "fuente": "oficial", "duracion": "45 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Panificados", "nombre": "Bizcocho de limón", "ingredientes": [{"cantidad": "500", "unidad": "g", "nombre": "azúcar"}, {"cantidad": "500", "unidad": "g", "nombre": "harina"}, {"cantidad": "250", "unidad": "ml", "nombre": "leche"}, {"cantidad": "250", "unidad": "ml", "nombre": "aceite de girasol"}, {"cantidad": "6", "unidad": "unidades", "nombre": "huevos"}, {"cantidad": "1", "unidad": "sobre", "nombre": "levadura"}, {"cantidad": "1", "unidad": "unidades", "nombre": "limón"}, {"cantidad": "1", "unidad": "unidades", "nombre": "yogur natural"}, {"cantidad": "1", "unidad": "pellizco", "nombre": "sal"}], "kosher": true, "id": 3, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 8, "funcion": "Batir", "comensales_base": 4, "jarra": "habana", "pasos": ["Azúcar + corteza limón vel 9, 30 seg.", "Mariposa + aceite + huevos + zumo + yogur + harina + levadura + leche.", "Mezclar vel 4, 1 min.", "Hornear 180ºC 35 min."], "jarra_razon": "Usa mariposa o MamboMix para batir", "dificultad": "Fácil", "fuente": "oficial", "duracion": "10 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Postres", "nombre": "Crema de limón", "ingredientes": [{"cantidad": "160", "unidad": "g", "nombre": "azúcar"}, {"cantidad": "60", "unidad": "g", "nombre": "mantequilla"}, {"cantidad": "2", "unidad": "limones", "nombre": "piel de limón"}, {"cantidad": "2", "unidad": "limones", "nombre": "zumo de limón"}, {"cantidad": "2", "unidad": "unidades", "nombre": "huevos"}], "kosher": true, "id": 4, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Batir", "comensales_base": 1, "jarra": "acero", "pasos": ["Azúcar + corteza vel 9, 15 seg.", "Mantequilla + zumo + mezclar vel 2, 1 min.", "Añadir huevos + maicena.", "Cocinar 80ºC vel 5, 7 min."], "jarra_razon": "Usa cuchillas para batir", "dificultad": "Fácil", "fuente": "oficial", "duracion": "15 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Postres", "nombre": "Batido de fresa y plátano", "ingredientes": [{"cantidad": "200", "unidad": "g", "nombre": "plátanos"}, {"cantidad": "200", "unidad": "g", "nombre": "fresas"}, {"cantidad": "100", "unidad": "g", "nombre": "azúcar"}, {"cantidad": "500", "unidad": "ml", "nombre": "leche"}, {"cantidad": "1", "unidad": "unidades", "nombre": "yogur natural"}], "kosher": true, "id": 5, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 8, "funcion": "Batir", "comensales_base": 4, "jarra": "habana", "pasos": ["Fresas + plátanos + yogur + azúcar.", "Triturar vel 5→10, 3 min.", "Programar vel 3, 3 min incorporando leche."], "jarra_razon": "Usa mariposa o MamboMix para batir", "dificultad": "Fácil", "fuente": "oficial", "duracion": "10 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Postres", "nombre": "Nata montada", "ingredientes": [{"cantidad": "500", "unidad": "ml", "nombre": "nata para montar fría"}, {"cantidad": "200", "unidad": "g", "nombre": "azúcar glas"}], "kosher": true, "id": 6, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 8, "funcion": "Montar", "comensales_base": 4, "jarra": "habana", "pasos": ["Jarra muy fría.", "Mariposa.", "Nata fría, vel 4, observar hasta montada.", "Incorporar azúcar glas."], "jarra_razon": "Usa mariposa o MamboMix para montar", "dificultad": "Fácil", "fuente": "oficial", "duracion": "10 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Postres", "nombre": "Merengue suizo", "ingredientes": [{"cantidad": "200", "unidad": "g", "nombre": "azúcar glas"}, {"cantidad": "4", "unidad": "unidades", "nombre": "claras de huevo"}, {"cantidad": "1", "unidad": "pellizco", "nombre": "sal"}, {"cantidad": "2", "unidad": "gotas", "nombre": "vinagre o zumo limón"}], "kosher": true, "id": 7, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 8, "funcion": "Montar", "comensales_base": 4, "jarra": "habana", "pasos": ["Mariposa.", "Todos ingredientes.", "Montar 50ºC vel 4, 4 min.", "Opcional: 4 min más vel 4 sin temperatura."], "jarra_razon": "Usa mariposa o MamboMix para montar", "dificultad": "Fácil", "fuente": "oficial", "duracion": "10 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Postres", "nombre": "Nubes de fresa", "ingredientes": [{"cantidad": "200", "unidad": "g", "nombre": "azúcar"}, {"cantidad": "200", "unidad": "ml", "nombre": "agua"}, {"cantidad": "1", "unidad": "sobre", "nombre": "gelatina de fresa"}, {"cantidad": "1", "unidad": "cucharada", "nombre": "gelatina de fresa extra"}, {"cantidad": "2", "unidad": "sobre", "nombre": "gelatina neutra"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "azúcar glas"}], "kosher": true, "id": 8, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Montar", "comensales_base": 1, "jarra": "habana", "pasos": ["Agua + gelatina neutra + azúcar, mezclar 10 seg vel 5, cocinar 5 min 100ºC vel.", "Gelatina fresa, vel 5, 10 seg, cocinar 5 min 100ºC.", "Reposar 1:30 h.", "Mariposa, montar vel 4, 6 min.", "Vertir en molde forrado, reposar 12 h.", "Cortar y pasar por azúcar glas."], "jarra_razon": "Usa mariposa o MamboMix para montar", "dificultad": "Media", "fuente": "oficial", "duracion": "30 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Panificados", "nombre": "Bizcocho", "ingredientes": [{"cantidad": "100", "unidad": "g", "nombre": "azúcar"}, {"cantidad": "100", "unidad": "g", "nombre": "harina"}, {"cantidad": "4", "unidad": "unidades", "nombre": "huevos"}, {"cantidad": "1", "unidad": "sobre", "nombre": "levadura"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "mantequilla"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "harina para molde"}], "kosher": true, "id": 9, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 10, "funcion": "Montar", "comensales_base": 10, "jarra": "habana", "pasos": ["Mariposa.", "Huevos + azúcar, vel 4 hasta triplicar.", "Agregar harina, vel 2 mezclar.", "Hornear en molde enharinado."], "jarra_razon": "Usa mariposa o MamboMix para montar", "dificultad": "Media", "fuente": "oficial", "duracion": "1h 30 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Postres", "nombre": "Soufflé de queso", "ingredientes": [{"cantidad": "20", "unidad": "g", "nombre": "harina"}, {"cantidad": "15", "unidad": "g", "nombre": "mantequilla"}, {"cantidad": "50", "unidad": "g", "nombre": "queso gruyer rallado"}, {"cantidad": "35", "unidad": "ml", "nombre": "nata para cocinar"}, {"cantidad": "100", "unidad": "ml", "nombre": "leche"}, {"cantidad": "1", "unidad": "unidades", "nombre": "huevo"}, {"cantidad": "1", "unidad": "unidades", "nombre": "yema de huevo"}, {"cantidad": "1", "unidad": "pellizco", "nombre": "nuez moscada"}, {"cantidad": "1", "unidad": "pellizco", "nombre": "sal"}, {"cantidad": "1", "unidad": "pellizco", "nombre": "pimienta"}], "kosher": false, "id": 10, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Montar", "comensales_base": 2, "jarra": "habana", "pasos": ["Precalentar 180ºC.", "Mariposa + todos ingredientes, 2 min 90ºC vel.", "Agregar queso + nata, mezclar 10 seg vel.", "Hornear en moldes 25 min."], "jarra_razon": "Usa mariposa o MamboMix para montar", "dificultad": "Media", "fuente": "oficial", "duracion": "45 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Verduras y arroces", "nombre": "Trocear verduras", "ingredientes": [{"cantidad": "1", "unidad": "unidades", "nombre": "pimiento rojo"}, {"cantidad": "1", "unidad": "unidades", "nombre": "pimiento verde"}, {"cantidad": "1", "unidad": "unidades", "nombre": "cebolla"}], "kosher": true, "id": 11, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Trocear", "comensales_base": 1, "jarra": "habana", "pasos": ["Pelar cebolla, cortar en cuartos.", "Agregar a jarra.", "Vel 4, 4 seg.", "Bajar restos, repetir si es necesario."], "jarra_razon": "Usa mariposa o MamboMix para trocear", "dificultad": "Fácil", "fuente": "oficial", "duracion": "5 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Verduras y arroces", "nombre": "Trocear verduras fibrosas", "ingredientes": [{"cantidad": "2", "unidad": "unidades", "nombre": "puerros"}], "kosher": true, "id": 12, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Trocear", "comensales_base": 1, "jarra": "habana", "pasos": ["Limpiar puerros, cortar en cruz.", "Cortar en trozos 4 cm.", "Vel 4, 4 seg.", "Repetir si es necesario."], "jarra_razon": "Usa mariposa o MamboMix para trocear", "dificultad": "Fácil", "fuente": "oficial", "duracion": "5 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Postres", "nombre": "Trocear frutas", "ingredientes": [{"cantidad": "3", "unidad": "unidades", "nombre": "melocotones"}], "kosher": true, "id": 13, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Trocear", "comensales_base": 1, "jarra": "habana", "pasos": ["Pelar, quitar hueso.", "Cortar en cuartos.", "Vel 4, 4 seg.", "Repetir si es necesario."], "jarra_razon": "Usa mariposa o MamboMix para trocear", "dificultad": "Fácil", "fuente": "oficial", "duracion": "5 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Verduras y arroces", "nombre": "Trocear vegetales pequeños o poca cantidad", "ingredientes": [{"cantidad": "6", "unidad": "diente", "nombre": "ajo"}, {"cantidad": "30", "unidad": "ml", "nombre": "aceite de oliva"}], "kosher": true, "id": 14, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Trocear", "comensales_base": 1, "jarra": "habana", "pasos": ["Pelar ajos.", "Ajo + aceite en jarra.", "Vel 4, 4 seg.", "Bajar, repetir si es necesario."], "jarra_razon": "Usa mariposa o MamboMix para trocear", "dificultad": "Fácil", "fuente": "oficial", "duracion": "5 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Postres", "nombre": "Trocear frutas de fácil oxidación", "ingredientes": [{"cantidad": "3", "unidad": "unidades", "nombre": "manzanas"}, {"cantidad": "0.5", "unidad": "limón", "nombre": "zumo de limón"}], "kosher": true, "id": 15, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Trocear", "comensales_base": 1, "jarra": "habana", "pasos": ["Pelar manzanas, cortar en cuartos.", "Manzana + zumo limón.", "Vel 4, 4 seg.", "Repetir si es necesario."], "jarra_razon": "Usa mariposa o MamboMix para trocear", "dificultad": "Fácil", "fuente": "oficial", "duracion": "5 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Verduras y arroces", "nombre": "Picar verduras", "ingredientes": [{"cantidad": "2", "unidad": "unidades", "nombre": "cebollas"}, {"cantidad": "4", "unidad": "diente", "nombre": "ajo"}], "kosher": true, "id": 16, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Picar", "comensales_base": 1, "jarra": "habana", "pasos": ["Pelar cebollas y ajos.", "Cebollas en cuartos + ajos.", "Vel 8, 4 seg.", "Bajar, repetir si es necesario."], "jarra_razon": "Usa mariposa o MamboMix para picar", "dificultad": "Fácil", "fuente": "oficial", "duracion": "5 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Salsas y aderezos", "nombre": "Picada de ajo y perejil", "ingredientes": [{"cantidad": "1", "unidad": "manojo", "nombre": "perejil"}, {"cantidad": "2", "unidad": "diente", "nombre": "ajo"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "aceite de oliva"}], "kosher": true, "id": 17, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Picar", "comensales_base": 1, "jarra": "habana", "pasos": ["Deshojear perejil.", "Perejil + ajo troceado.", "Vel 6, 15 seg.", "Bajar, vel 6, 15 seg más.", "Guardar en aceite."], "jarra_razon": "Usa mariposa o MamboMix para picar", "dificultad": "Fácil", "fuente": "oficial", "duracion": "5 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Carnes", "nombre": "Picar carne", "ingredientes": [{"cantidad": "250", "unidad": "g", "nombre": "carne magra cerdo/ternera"}], "kosher": true, "id": 18, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Picar", "comensales_base": 1, "jarra": "habana", "pasos": ["Trocear carne, congelar 30 min.", "Agregar a jarra.", "Vel 5→10 progresivamente, 20 seg.", "Repetir si es necesario."], "jarra_razon": "Usa mariposa o MamboMix para picar", "dificultad": "Fácil", "fuente": "oficial", "duracion": "5 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Postres", "nombre": "Picar hielo", "ingredientes": [{"cantidad": "200", "unidad": "g", "nombre": "hielo"}], "kosher": true, "id": 19, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Picar", "comensales_base": 1, "jarra": "habana", "pasos": ["Hielo húmedo en jarra (máximo mitad).", "Vel 5, 20 seg.", "Bajar, repetir si es necesario."], "jarra_razon": "Usa mariposa o MamboMix para picar", "dificultad": "Fácil", "fuente": "oficial", "duracion": "5 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Salsas y aderezos", "nombre": "Pico de gallo", "ingredientes": [{"cantidad": "2", "unidad": "unidades", "nombre": "cebollas"}, {"cantidad": "1", "unidad": "unidades", "nombre": "pimiento rojo"}, {"cantidad": "1", "unidad": "unidades", "nombre": "pimiento verde"}, {"cantidad": "1", "unidad": "limón", "nombre": "zumo de limón"}, {"cantidad": "2", "unidad": "cucharada", "nombre": "aceite"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "sal"}], "kosher": true, "id": 20, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Picar", "comensales_base": 1, "jarra": "habana", "pasos": ["Verduras en cuartos + todos ingredientes.", "Vel 8, 4 seg.", "Bajar, repetir si es necesario."], "jarra_razon": "Usa mariposa o MamboMix para picar", "dificultad": "Fácil", "fuente": "oficial", "duracion": "5 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Salsas y aderezos", "nombre": "Hummus", "ingredientes": [{"cantidad": "350", "unidad": "g", "nombre": "garbanzos cocidos"}, {"cantidad": "1", "unidad": "diente", "nombre": "ajo"}, {"cantidad": "20", "unidad": "ml", "nombre": "aceite de oliva"}, {"cantidad": "0.5", "unidad": "unidades", "nombre": "lima"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "comino"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "sésamo"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "pimienta"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "sal"}], "kosher": true, "id": 21, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Triturar", "comensales_base": 1, "jarra": "acero", "pasos": ["Garbanzos + ajo, vel 5, 1 min.", "Resto ingredientes, vel 5, 1 min.", "Espolvorear sésamo, servir."], "jarra_razon": "Usa cuchillas para triturar", "dificultad": "Fácil", "fuente": "oficial", "duracion": "5 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Salsas y aderezos", "nombre": "Guacamole", "ingredientes": [{"cantidad": "4", "unidad": "unidades", "nombre": "aguacates maduros"}, {"cantidad": "1", "unidad": "unidades", "nombre": "cebolla mediana"}, {"cantidad": "1", "unidad": "unidades", "nombre": "tomate maduro"}, {"cantidad": "1", "unidad": "unidades", "nombre": "chile picante"}, {"cantidad": "20", "unidad": "g", "nombre": "cilantro fresco"}, {"cantidad": "30", "unidad": "ml", "nombre": "zumo de lima"}, {"cantidad": "1", "unidad": "pellizco", "nombre": "sal"}], "kosher": true, "id": 22, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 8, "funcion": "Triturar", "comensales_base": 4, "jarra": "acero", "pasos": ["Cebolla + chile + cilantro, vel 5, 8 seg.", "Triturar vel 5, 2:30 min.", "Incorporar aguacate + zumo lima.", "Agregar tomate, mezclar."], "jarra_razon": "Usa cuchillas para triturar", "dificultad": "Fácil", "fuente": "oficial", "duracion": "5 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Sopas y cremas", "nombre": "Gazpacho", "ingredientes": [{"cantidad": "1", "unidad": "kg", "nombre": "tomates maduros"}, {"cantidad": "50", "unidad": "g", "nombre": "pimiento verde"}, {"cantidad": "50", "unidad": "g", "nombre": "pimiento rojo"}, {"cantidad": "40", "unidad": "g", "nombre": "cebolla"}, {"cantidad": "70", "unidad": "g", "nombre": "pepino pelado"}, {"cantidad": "30", "unidad": "ml", "nombre": "vinagre"}, {"cantidad": "50", "unidad": "ml", "nombre": "aceite de oliva virgen"}, {"cantidad": "250", "unidad": "ml", "nombre": "agua"}, {"cantidad": "2", "unidad": "diente", "nombre": "ajo"}, {"cantidad": "1", "unidad": "pellizco", "nombre": "sal"}], "kosher": true, "id": 23, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 8, "funcion": "Triturar", "comensales_base": 6, "jarra": "acero", "pasos": ["Trocear todos ingredientes.", "Vel 5, 20 seg.", "Bajar restos, vel 10, 3 min."], "jarra_razon": "Usa cuchillas para triturar", "dificultad": "Fácil", "fuente": "oficial", "duracion": "10 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Sopas y cremas", "nombre": "Ajoblanco", "ingredientes": [{"cantidad": "200", "unidad": "g", "nombre": "almendras crudas peladas"}, {"cantidad": "100", "unidad": "g", "nombre": "miga de pan remojada"}, {"cantidad": "70", "unidad": "ml", "nombre": "aceite de oliva virgen"}, {"cantidad": "30", "unidad": "ml", "nombre": "vinagre"}, {"cantidad": "800", "unidad": "ml", "nombre": "agua"}, {"cantidad": "2", "unidad": "diente", "nombre": "ajo"}, {"cantidad": "1", "unidad": "pellizco", "nombre": "sal"}], "kosher": true, "id": 24, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 8, "funcion": "Triturar", "comensales_base": 6, "jarra": "acero", "pasos": ["Almendras + ajo + sal, vel 5, 30 seg.", "Pan, vel 5, 15 seg.", "Verter aceite lentamente vel.", "Vinagre + agua, vel 10, 2 min."], "jarra_razon": "Usa cuchillas para triturar", "dificultad": "Fácil", "fuente": "oficial", "duracion": "10 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Carnes", "nombre": "Albóndigas caseras", "ingredientes": [{"cantidad": "250", "unidad": "g", "nombre": "carne magra cerdo"}, {"cantidad": "250", "unidad": "g", "nombre": "carne magra ternera"}, {"cantidad": "25", "unidad": "ml", "nombre": "leche"}, {"cantidad": "2", "unidad": "rebanada", "nombre": "pan de molde"}, {"cantidad": "1", "unidad": "unidades", "nombre": "huevo"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "perejil picado"}, {"cantidad": "1", "unidad": "unidades", "nombre": "cebolla"}, {"cantidad": "2", "unidad": "diente", "nombre": "ajo"}], "kosher": true, "id": 25, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 8, "funcion": "Triturar", "comensales_base": 6, "jarra": "acero", "pasos": ["Carnes sin mezclar.", "Resto ingredientes vel 6, 6 seg.", "Agregar carne vel 5, 15-20 seg.", "Hacer bolitas, pasar harina, freír."], "jarra_razon": "Usa cuchillas para triturar", "dificultad": "Fácil", "fuente": "oficial", "duracion": "10 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Carnes", "nombre": "Lentejas con jamón", "ingredientes": [{"cantidad": "350", "unidad": "g", "nombre": "lentejas remojadas"}, {"cantidad": "125", "unidad": "g", "nombre": "jamón a tacos"}, {"cantidad": "750", "unidad": "ml", "nombre": "agua"}, {"cantidad": "1", "unidad": "unidades", "nombre": "tomate"}, {"cantidad": "1", "unidad": "unidades", "nombre": "pimiento verde"}, {"cantidad": "0.5", "unidad": "unidades", "nombre": "cebolla"}, {"cantidad": "3", "unidad": "diente", "nombre": "ajo"}, {"cantidad": "1", "unidad": "cucharada", "nombre": "pimentón"}, {"cantidad": "1", "unidad": "unidades", "nombre": "zanahoria"}, {"cantidad": "1", "unidad": "pastilla", "nombre": "caldo de verduras"}, {"cantidad": "1", "unidad": "hoja", "nombre": "laurel"}, {"cantidad": "30", "unidad": "ml", "nombre": "aceite de oliva"}, {"cantidad": "1", "unidad": "pellizco", "nombre": "sal"}], "kosher": false, "id": 26, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 8, "funcion": "Mezclar", "comensales_base": 6, "jarra": "acero", "pasos": ["Trocear verduras, sofrer 110ºC vel 1, 8 min.", "Lentejas + agua + ingredientes, cocinar 100ºC vel 1, 25 min."], "jarra_razon": "Usa cuchillas para mezclar", "dificultad": "Fácil", "fuente": "oficial", "duracion": "40 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Verduras y arroces", "nombre": "Pisto con tomate", "ingredientes": [{"cantidad": "1", "unidad": "unidades", "nombre": "cebolla"}, {"cantidad": "4", "unidad": "diente", "nombre": "ajo"}, {"cantidad": "1", "unidad": "unidades", "nombre": "berenjena"}, {"cantidad": "1", "unidad": "unidades", "nombre": "calabacín"}, {"cantidad": "1", "unidad": "unidades", "nombre": "pimiento rojo"}, {"cantidad": "4", "unidad": "unidades", "nombre": "tomates"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "aceite de oliva"}, {"cantidad": "1", "unidad": "cucharadita", "nombre": "sal"}], "kosher": true, "id": 27, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 8, "funcion": "Mezclar", "comensales_base": 4, "jarra": "acero", "pasos": ["Verduras en jarra, trocear.", "Mariposa + aceite, 110ºC vel 1, 20 min potencia 3."], "jarra_razon": "Usa cuchillas para mezclar", "dificultad": "Fácil", "fuente": "oficial", "duracion": "45 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Carnes", "nombre": "Arroz caldoso con pollo", "ingredientes": [{"cantidad": "500", "unidad": "g", "nombre": "pollo deshuesado troceado"}, {"cantidad": "100", "unidad": "g", "nombre": "pimiento rojo"}, {"cantidad": "100", "unidad": "g", "nombre": "pimiento verde"}, {"cantidad": "200", "unidad": "g", "nombre": "judías verdes troceadas congeladas"}, {"cantidad": "50", "unidad": "ml", "nombre": "aceite de oliva virgen extra"}, {"cantidad": "1", "unidad": "litro", "nombre": "caldo de ave"}, {"cantidad": "2", "unidad": "unidades", "nombre": "tomates maduros"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "sal"}], "kosher": true, "id": 28, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Mezclar", "comensales_base": 2, "jarra": "acero", "pasos": ["Trocear pimiento + tomate.", "Picar carne, reservar.", "Resto ingredientes sin arroz, 120ºC vel 1, 1 h.", "Agregar arroz, 15 min sin movimiento 100ºC."], "jarra_razon": "Usa cuchillas para mezclar", "dificultad": "Media", "fuente": "oficial", "duracion": "45 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Postres", "nombre": "Coulant de turrón", "ingredientes": [{"cantidad": "200", "unidad": "g", "nombre": "turrón blando"}, {"cantidad": "100", "unidad": "g", "nombre": "azúcar"}, {"cantidad": "75", "unidad": "g", "nombre": "harina"}, {"cantidad": "4", "unidad": "unidades", "nombre": "huevos"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "harina para molde"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "mantequilla"}], "kosher": true, "id": 29, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 8, "funcion": "Mezclar", "comensales_base": 4, "jarra": "acero", "pasos": ["Turrón + azúcar vel 5, 1 min.", "Huevos + harina, vel 3 mezclar.", "Moldes enharinados, 180ºC 6-7 min."], "jarra_razon": "Usa cuchillas para mezclar", "dificultad": "Media", "fuente": "oficial", "duracion": "30 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Postres", "nombre": "Tarta de queso", "ingredientes": [{"cantidad": "200", "unidad": "g", "nombre": "queso crema"}, {"cantidad": "170", "unidad": "g", "nombre": "azúcar"}, {"cantidad": "70", "unidad": "g", "nombre": "mantequilla"}, {"cantidad": "200", "unidad": "ml", "nombre": "nata líquida 35 % MG"}, {"cantidad": "300", "unidad": "ml", "nombre": "leche"}, {"cantidad": "2", "unidad": "sobre", "nombre": "cuajada"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "galletas para base"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "mermelada fresa/frambuesa"}], "kosher": true, "id": 30, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 10, "funcion": "Mezclar", "comensales_base": 8, "jarra": "acero", "pasos": ["Galletas molidas + mantequilla vel 5, mezclar.", "Base en molde.", "Resto ingredientes 90ºC vel 4, 8 min.", "Vertir, frigorífico.", "Decorar mermelada."], "jarra_razon": "Usa cuchillas para mezclar", "dificultad": "Fácil", "fuente": "oficial", "duracion": "30 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Carnes", "nombre": "Revuelto de chistorra", "ingredientes": [{"cantidad": "150", "unidad": "g", "nombre": "chistorra"}, {"cantidad": "50", "unidad": "ml", "nombre": "nata"}, {"cantidad": "4", "unidad": "unidades", "nombre": "huevos"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "sal"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "aceite de oliva"}], "kosher": false, "id": 31, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Remover", "comensales_base": 2, "jarra": "acero", "pasos": ["Chistorra a rodajas + aceite, 100ºC vel 1, 5 min.", "Huevos batidos + nata + sal, vel 2, 100ºC, 2 min."], "jarra_razon": "Usa cuchillas para remover", "dificultad": "Fácil", "fuente": "oficial", "duracion": "15 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Postres", "nombre": "Crema inglesa de limón", "ingredientes": [{"cantidad": "60", "unidad": "g", "nombre": "azúcar glas"}, {"cantidad": "60", "unidad": "g", "nombre": "mantequilla"}, {"cantidad": "10", "unidad": "g", "nombre": "maicena"}, {"cantidad": "70", "unidad": "g", "nombre": "clara de huevo"}, {"cantidad": "130", "unidad": "g", "nombre": "yema de huevo"}, {"cantidad": "140", "unidad": "ml", "nombre": "zumo de limón natural"}], "kosher": true, "id": 32, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Remover", "comensales_base": 1, "jarra": "acero", "pasos": ["Azúcar + zumo limón + mantequilla vel 2, 1 min.", "Huevos + maicena.", "Cocinar 80ºC vel 2, 15 min potencia 3."], "jarra_razon": "Usa cuchillas para remover", "dificultad": "Fácil", "fuente": "oficial", "duracion": "20 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Postres", "nombre": "Crema catalana", "ingredientes": [{"cantidad": "50", "unidad": "g", "nombre": "azúcar"}, {"cantidad": "20", "unidad": "g", "nombre": "maicena"}, {"cantidad": "500", "unidad": "ml", "nombre": "leche"}, {"cantidad": "3", "unidad": "unidades", "nombre": "yemas"}, {"cantidad": "1", "unidad": "ramita", "nombre": "canela en rama"}, {"cantidad": "1", "unidad": "unidades", "nombre": "piel de limón"}, {"cantidad": "50", "unidad": "g", "nombre": "azúcar para quemar"}], "kosher": true, "id": 33, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 8, "funcion": "Remover", "comensales_base": 4, "jarra": "acero", "pasos": ["Leche + canela + piel limón, 80ºC vel 1, 10 min.", "Colar.", "Azúcar + maicena + yemas, remover 70ºC vel 3, potencia 4 hasta espesar.", "Frigorífico.", "Azúcar quemada."], "jarra_razon": "Usa cuchillas para remover", "dificultad": "Fácil", "fuente": "oficial", "duracion": "20 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Pescados", "nombre": "Titaina", "ingredientes": [{"cantidad": "100", "unidad": "g", "nombre": "atún en salmuera"}, {"cantidad": "500", "unidad": "g", "nombre": "tomate troceado"}, {"cantidad": "50", "unidad": "g", "nombre": "pimiento rojo"}, {"cantidad": "50", "unidad": "g", "nombre": "pimiento verde"}, {"cantidad": "20", "unidad": "g", "nombre": "piñones"}, {"cantidad": "40", "unidad": "ml", "nombre": "aceite de oliva"}, {"cantidad": "2", "unidad": "unidades", "nombre": "ajo"}, {"cantidad": "1", "unidad": "cucharada", "nombre": "sal"}, {"cantidad": "2", "unidad": "cucharada", "nombre": "azúcar"}], "kosher": true, "id": 34, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 8, "funcion": "Remover", "comensales_base": 4, "jarra": "acero", "pasos": ["Pimiento + ajo trocear vel 5, 10 seg.", "Resto ingredientes, remover 100ºC vel 2, 30 min potencia.", "Reposar."], "jarra_razon": "Usa cuchillas para remover", "dificultad": "Fácil", "fuente": "oficial", "duracion": "1h", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Verduras y arroces", "nombre": "Puré de patata", "ingredientes": [{"cantidad": "500", "unidad": "g", "nombre": "patatas"}, {"cantidad": "50", "unidad": "g", "nombre": "mantequilla"}, {"cantidad": "200", "unidad": "ml", "nombre": "leche"}, {"cantidad": "125", "unidad": "ml", "nombre": "agua"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "sal"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "pimienta"}], "kosher": true, "id": 35, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 8, "funcion": "Remover", "comensales_base": 4, "jarra": "acero", "pasos": ["Patatas en cuartos + leche + agua + sal, 100ºC vel 2, 20 min cubilete abierto.", "Mantequilla, salpimentar, vel 6 textura deseada."], "jarra_razon": "Usa cuchillas para remover", "dificultad": "Fácil", "fuente": "oficial", "duracion": "45 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Postres", "nombre": "Cheesecake de pesto", "ingredientes": [{"cantidad": "300", "unidad": "g", "nombre": "queso crema"}, {"cantidad": "100", "unidad": "g", "nombre": "pesto"}, {"cantidad": "150", "unidad": "ml", "nombre": "nata"}, {"cantidad": "4", "unidad": "hoja", "nombre": "gelatina hidratada"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "sal"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "pimienta"}, {"cantidad": "150", "unidad": "g", "nombre": "galletas saladas"}, {"cantidad": "100", "unidad": "g", "nombre": "mantequilla"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "cherry"}], "kosher": true, "id": 36, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 10, "funcion": "Remover", "comensales_base": 8, "jarra": "acero", "pasos": ["Galletas + mantequilla vel 4, 2 min.", "Nata 90ºC 2 min.", "Gelatina, vel 2, 2 min.", "Queso + pesto vel 3 mezclar.", "Frigorífico 4 h.", "Decorar."], "jarra_razon": "Usa cuchillas para remover", "dificultad": "Media", "fuente": "oficial", "duracion": "30 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Salsas y aderezos", "nombre": "Café molido", "ingredientes": [{"cantidad": "250", "unidad": "g", "nombre": "café en grano"}], "kosher": true, "id": 37, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Moler", "comensales_base": 1, "jarra": "acero", "pasos": ["Café en jarra seca.", "Vel 5, 1 min progresivo a vel.", "Vel 10, 30 seg más opcional."], "jarra_razon": "Usa cuchillas para moler", "dificultad": "Fácil", "fuente": "oficial", "duracion": "5 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Verduras y arroces", "nombre": "Harina de garbanzo", "ingredientes": [{"cantidad": "500", "unidad": "g", "nombre": "garbanzos secos"}], "kosher": true, "id": 38, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Moler", "comensales_base": 1, "jarra": "acero", "pasos": ["Garbanzos en jarra.", "Vel 6, 30 seg.", "Vel máxima hasta muy fino."], "jarra_razon": "Usa cuchillas para moler", "dificultad": "Fácil", "fuente": "oficial", "duracion": "10 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Salsas y aderezos", "nombre": "Crema de cacahuete", "ingredientes": [{"cantidad": "300", "unidad": "g", "nombre": "cacahuetes tostados"}], "kosher": true, "id": 39, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Moler", "comensales_base": 1, "jarra": "acero", "pasos": ["Cacahuetes en jarra.", "Vel 5, 6 min.", "Guardar en frasco frigorífico."], "jarra_razon": "Usa cuchillas para moler", "dificultad": "Fácil", "fuente": "oficial", "duracion": "10 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Verduras y arroces", "nombre": "Harina de lentejas", "ingredientes": [{"cantidad": "500", "unidad": "g", "nombre": "lentejas secas"}], "kosher": true, "id": 40, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Moler", "comensales_base": 1, "jarra": "acero", "pasos": ["Lentejas en jarra.", "Vel 6, 30 seg.", "Vel máxima hasta muy fino."], "jarra_razon": "Usa cuchillas para moler", "dificultad": "Fácil", "fuente": "oficial", "duracion": "10 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Salsas y aderezos", "nombre": "Sésamo molido", "ingredientes": [{"cantidad": "300", "unidad": "g", "nombre": "sésamo"}], "kosher": true, "id": 41, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Moler", "comensales_base": 1, "jarra": "acero", "pasos": ["Sésamo, vel 3, 80ºC, 4 min.", "Vel 6, 30 seg.", "Bajar, vel 6, 30 seg más."], "jarra_razon": "Usa cuchillas para moler", "dificultad": "Fácil", "fuente": "oficial", "duracion": "5 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Postres", "nombre": "Azúcar glas", "ingredientes": [{"cantidad": "300", "unidad": "g", "nombre": "azúcar"}], "kosher": true, "id": 42, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Pulverizar", "comensales_base": 1, "jarra": "acero", "pasos": ["Azúcar en jarra seca.", "Vel 10, 20 seg.", "Bajar con espátula, vel 10, 20 seg."], "jarra_razon": "Usa cuchillas para pulverizar", "dificultad": "Fácil", "fuente": "oficial", "duracion": "5 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Panificados", "nombre": "Pan rallado", "ingredientes": [{"cantidad": "200", "unidad": "g", "nombre": "pan seco o duro"}], "kosher": true, "id": 43, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Pulverizar", "comensales_base": 1, "jarra": "acero", "pasos": ["Pan en trozos.", "3 golpes turbo.", "Vel 10, 1 min.", "Repetir si es necesario."], "jarra_razon": "Usa cuchillas para pulverizar", "dificultad": "Fácil", "fuente": "oficial", "duracion": "5 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Salsas y aderezos", "nombre": "Mezcla de especias aromáticas", "ingredientes": [{"cantidad": "4", "unidad": "cucharada", "nombre": "tomillo"}, {"cantidad": "4", "unidad": "cucharada", "nombre": "romero"}, {"cantidad": "1", "unidad": "cucharada", "nombre": "comino"}, {"cantidad": "1", "unidad": "cucharada", "nombre": "ajo en polvo"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "sal"}], "kosher": true, "id": 44, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Pulverizar", "comensales_base": 1, "jarra": "acero", "pasos": ["Todos ingredientes en jarra.", "Vel 10, 2 min.", "Guardar en tarro."], "jarra_razon": "Usa cuchillas para pulverizar", "dificultad": "Fácil", "fuente": "oficial", "duracion": "5 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Salsas y aderezos", "nombre": "Queso rallado", "ingredientes": [{"cantidad": "200", "unidad": "g", "nombre": "parmesano"}], "kosher": true, "id": 45, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Pulverizar", "comensales_base": 1, "jarra": "acero", "pasos": ["Parmesano troceado.", "3 golpes turbo.", "Vel 10, 30 seg.", "Repetir si es necesario."], "jarra_razon": "Usa cuchillas para pulverizar", "dificultad": "Fácil", "fuente": "oficial", "duracion": "5 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Postres", "nombre": "Azúcar aromatizado de naranja", "ingredientes": [{"cantidad": "300", "unidad": "g", "nombre": "azúcar"}, {"cantidad": "1", "unidad": "unidades", "nombre": "corteza de naranja"}], "kosher": true, "id": 46, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Pulverizar", "comensales_base": 1, "jarra": "acero", "pasos": ["Azúcar + corteza naranja sin blanco.", "Vel 10, 1 min.", "Bajar, vel 10, 1 min más."], "jarra_razon": "Usa cuchillas para pulverizar", "dificultad": "Fácil", "fuente": "oficial", "duracion": "5 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Panificados", "nombre": "Masa de pizza", "ingredientes": [{"cantidad": "20", "unidad": "g", "nombre": "levadura prensada fresca"}, {"cantidad": "400", "unidad": "g", "nombre": "harina de fuerza"}, {"cantidad": "200", "unidad": "ml", "nombre": "agua"}, {"cantidad": "50", "unidad": "ml", "nombre": "aceite de oliva virgen"}, {"cantidad": "1", "unidad": "cucharadita", "nombre": "sal"}], "kosher": true, "id": 47, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Amasar", "comensales_base": 2, "jarra": "acero", "pasos": ["Cambiar cuchillas por MamboMix.", "Verter todos ingredientes.", "Amasar vel 3, 8 min.", "Reposar en lugar cálido hasta doblar."], "jarra_razon": "Usa cuchillas para amasar", "dificultad": "Fácil", "fuente": "oficial", "duracion": "10 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Panificados", "nombre": "Masa de pizza en 1 minuto", "ingredientes": [{"cantidad": "10", "unidad": "g", "nombre": "sal"}, {"cantidad": "300", "unidad": "g", "nombre": "harina de fuerza"}, {"cantidad": "150", "unidad": "ml", "nombre": "agua con gas"}, {"cantidad": "10", "unidad": "ml", "nombre": "aceite de oliva virgen extra"}], "kosher": true, "id": 48, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Amasar", "comensales_base": 1, "jarra": "acero", "pasos": ["MamboMix.", "Verter todos.", "Vel 3, 1 min.", "Bol enharinado, fermentar hasta doblar."], "jarra_razon": "Usa cuchillas para amasar", "dificultad": "Fácil", "fuente": "oficial", "duracion": "1 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Panificados", "nombre": "Masa de pan de pueblo", "ingredientes": [{"cantidad": "10", "unidad": "g", "nombre": "levadura fresca"}, {"cantidad": "100", "unidad": "g", "nombre": "harina repostería (poolish)"}, {"cantidad": "100", "unidad": "ml", "nombre": "agua (poolish)"}, {"cantidad": "500", "unidad": "g", "nombre": "harina de fuerza"}, {"cantidad": "10", "unidad": "g", "nombre": "sal"}, {"cantidad": "280", "unidad": "ml", "nombre": "agua"}, {"cantidad": "1", "unidad": "pellizco", "nombre": "aceite"}], "kosher": true, "id": 49, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 8, "funcion": "Amasar", "comensales_base": 4, "jarra": "acero", "pasos": ["Día anterior: poolish, frío.", "MamboMix.", "Todos ingredientes.", "Amasar vel 3, 8 min.", "Reposar 30-40 min."], "jarra_razon": "Usa cuchillas para amasar", "dificultad": "Media", "fuente": "oficial", "duracion": "1h", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Panificados", "nombre": "Masa de bollería", "ingredientes": [{"cantidad": "120", "unidad": "g", "nombre": "azúcar"}, {"cantidad": "40", "unidad": "g", "nombre": "levadura fresca"}, {"cantidad": "500", "unidad": "g", "nombre": "harina de fuerza"}, {"cantidad": "100", "unidad": "ml", "nombre": "agua"}, {"cantidad": "100", "unidad": "ml", "nombre": "aceite"}, {"cantidad": "2", "unidad": "unidades", "nombre": "huevos"}], "kosher": true, "id": 50, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 8, "funcion": "Amasar", "comensales_base": 4, "jarra": "acero", "pasos": ["MamboMix.", "Todos ingredientes.", "Amasar vel 3, 8 min.", "Bandeja.", "Fermentar y hornear 180ºC."], "jarra_razon": "Usa cuchillas para amasar", "dificultad": "Media", "fuente": "oficial", "duracion": "30 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Panificados", "nombre": "Masa quebrada", "ingredientes": [{"cantidad": "200", "unidad": "g", "nombre": "harina"}, {"cantidad": "100", "unidad": "g", "nombre": "mantequilla temperatura ambiente"}, {"cantidad": "1", "unidad": "unidades", "nombre": "huevo"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "sal"}], "kosher": true, "id": 51, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Amasar", "comensales_base": 1, "jarra": "acero", "pasos": ["MamboMix.", "Todos ingredientes.", "Vel 2 hasta integrar.", "Frigorífico 30 min."], "jarra_razon": "Usa cuchillas para amasar", "dificultad": "Fácil", "fuente": "oficial", "duracion": "10 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Salsas y aderezos", "nombre": "Mayonesa", "ingredientes": [{"cantidad": "300", "unidad": "g", "nombre": "aceite de girasol"}, {"cantidad": "1", "unidad": "unidades", "nombre": "huevo"}, {"cantidad": "0.5", "unidad": "limón", "nombre": "zumo de limón"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "sal"}], "kosher": true, "id": 52, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Emulsionar", "comensales_base": 1, "jarra": "acero", "pasos": ["Huevo + zumo limón + sal, vel 4, 10 seg.", "Mantener vel 4, verter aceite lentamente por tapa."], "jarra_razon": "Usa cuchillas para emulsionar", "dificultad": "Fácil", "fuente": "oficial", "duracion": "10 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Salsas y aderezos", "nombre": "Alioli", "ingredientes": [{"cantidad": "250", "unidad": "ml", "nombre": "aceite de oliva"}, {"cantidad": "1", "unidad": "unidades", "nombre": "huevo"}, {"cantidad": "2", "unidad": "unidades", "nombre": "ajo"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "sal"}], "kosher": true, "id": 53, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Emulsionar", "comensales_base": 1, "jarra": "acero", "pasos": ["Ajos, vel 8, 10 seg.", "Bajar, huevo + sal, vel 6, 5 seg.", "Vel 4 sin tiempo, verter aceite lentamente."], "jarra_razon": "Usa cuchillas para emulsionar", "dificultad": "Media", "fuente": "oficial", "duracion": "10 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Salsas y aderezos", "nombre": "Vinagreta de mostaza", "ingredientes": [{"cantidad": "30", "unidad": "g", "nombre": "mostaza de Dijon"}, {"cantidad": "80", "unidad": "ml", "nombre": "vinagre de Módena"}, {"cantidad": "60", "unidad": "ml", "nombre": "aceite de oliva"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "sal"}], "kosher": true, "id": 54, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Emulsionar", "comensales_base": 1, "jarra": "acero", "pasos": ["Todos ingredientes en jarra.", "Vel 4, 20 seg.", "Servir."], "jarra_razon": "Usa cuchillas para emulsionar", "dificultad": "Fácil", "fuente": "oficial", "duracion": "15 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Salsas y aderezos", "nombre": "Vinagreta de frutos rojos", "ingredientes": [{"cantidad": "50", "unidad": "g", "nombre": "mermelada de frutos rojos"}, {"cantidad": "80", "unidad": "ml", "nombre": "vinagre de manzana"}, {"cantidad": "80", "unidad": "ml", "nombre": "aceite de oliva virgen"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "sal"}], "kosher": true, "id": 55, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Emulsionar", "comensales_base": 1, "jarra": "acero", "pasos": ["Todos ingredientes.", "Vel 4, 20 seg.", "Servir."], "jarra_razon": "Usa cuchillas para emulsionar", "dificultad": "Fácil", "fuente": "oficial", "duracion": "5 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Salsas y aderezos", "nombre": "Salsa tártara", "ingredientes": [{"cantidad": "375", "unidad": "g", "nombre": "mayonesa"}, {"cantidad": "10", "unidad": "g", "nombre": "pepinillos en vinagre"}, {"cantidad": "10", "unidad": "g", "nombre": "alcaparras en vinagre"}, {"cantidad": "10", "unidad": "g", "nombre": "cebolleta picada"}, {"cantidad": "1", "unidad": "unidades", "nombre": "huevo duro"}], "kosher": false, "id": 56, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Emulsionar", "comensales_base": 1, "jarra": "acero", "pasos": ["Preparar mayonesa.", "Pepinillos + alcaparras + cebolleta vel 5, 5 seg.", "Huevo duro vel 4, 4 seg.", "Mezclar."], "jarra_razon": "Usa cuchillas para emulsionar", "dificultad": "Media", "fuente": "oficial", "duracion": "5 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Postres", "nombre": "Naranja confitada", "ingredientes": [{"cantidad": "500", "unidad": "g", "nombre": "azúcar"}, {"cantidad": "500", "unidad": "ml", "nombre": "agua"}, {"cantidad": "3", "unidad": "unidades", "nombre": "naranjas"}], "kosher": true, "id": 57, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 8, "funcion": "Confitar", "comensales_base": 6, "jarra": "acero", "pasos": ["Naranjas a rodajas.", "Agua + azúcar + naranja, 90ºC potencia 3, vel 1, 30 min."], "jarra_razon": "Usa cuchillas para confitar", "dificultad": "Fácil", "fuente": "oficial", "duracion": "30 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Verduras y arroces", "nombre": "Ajo confitado", "ingredientes": [{"cantidad": "500", "unidad": "ml", "nombre": "aceite de oliva virgen"}, {"cantidad": "8", "unidad": "cabeza", "nombre": "ajo pelado"}], "kosher": true, "id": 58, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 8, "funcion": "Confitar", "comensales_base": 6, "jarra": "acero", "pasos": ["Mariposa.", "Ajos cubiertos de aceite.", "Cocinar 90ºC vel 1, potencia 3, 25-30 min.", "Guardar con aceite."], "jarra_razon": "Usa cuchillas para confitar", "dificultad": "Fácil", "fuente": "oficial", "duracion": "25 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Verduras y arroces", "nombre": "Alcachofas confitadas", "ingredientes": [{"cantidad": "250", "unidad": "ml", "nombre": "aceite de oliva virgen extra"}, {"cantidad": "6", "unidad": "unidades", "nombre": "alcachofas"}, {"cantidad": "1", "unidad": "diente", "nombre": "ajo"}, {"cantidad": "1", "unidad": "hoja", "nombre": "laurel"}, {"cantidad": "1", "unidad": "rama", "nombre": "tomillo"}, {"cantidad": "1", "unidad": "cucharadita", "nombre": "sal"}, {"cantidad": "10", "unidad": "grano", "nombre": "pimienta negra en grano"}], "kosher": true, "id": 59, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Confitar", "comensales_base": 2, "jarra": "acero", "pasos": ["Limpiar alcachofas.", "Aceite 90ºC vel 2, 5 min.", "Secar alcachofas, agregar con especias.", "Cocinar 90ºC potencia 3, 20 min.", "Guardar en bote."], "jarra_razon": "Usa cuchillas para confitar", "dificultad": "Fácil", "fuente": "oficial", "duracion": "45 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Pescados", "nombre": "Pescado confitado", "ingredientes": [{"cantidad": "5", "unidad": "unidades", "nombre": "filetes de merluza"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "aceite de oliva"}, {"cantidad": "6", "unidad": "diente", "nombre": "ajo"}], "kosher": true, "id": 60, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Confitar", "comensales_base": 2, "jarra": "acero", "pasos": ["Merluza + aceite + ajos.", "Cocinar 80ºC potencia 3, 15 min.", "Extraer con cuidado, servir."], "jarra_razon": "Usa cuchillas para confitar", "dificultad": "Fácil", "fuente": "oficial", "duracion": "15 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Pescados", "nombre": "Sardinas en escabeche", "ingredientes": [{"cantidad": "4", "unidad": "unidades", "nombre": "sardinas"}, {"cantidad": "100", "unidad": "ml", "nombre": "vinagre"}, {"cantidad": "100", "unidad": "ml", "nombre": "vino blanco"}, {"cantidad": "1", "unidad": "unidades", "nombre": "zanahoria"}, {"cantidad": "1", "unidad": "unidades", "nombre": "cebolla"}, {"cantidad": "2", "unidad": "diente", "nombre": "ajo"}, {"cantidad": "1", "unidad": "hoja", "nombre": "laurel"}, {"cantidad": "1", "unidad": "pellizco", "nombre": "sal"}, {"cantidad": "1", "unidad": "cucharadita", "nombre": "pimienta en grano"}], "kosher": true, "id": 61, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 8, "funcion": "Confitar", "comensales_base": 4, "jarra": "acero", "pasos": ["Filetear sardinas.", "Cocinar marinada 90ºC potencia 2, vel 1, 40 min.", "A los 20 min, agregar sardinas piel arriba.", "Reposar, frigorífico."], "jarra_razon": "Usa cuchillas para confitar", "dificultad": "Media", "fuente": "oficial", "duracion": "1h", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Carnes", "nombre": "Pechuga escalfada", "ingredientes": [{"cantidad": "50", "unidad": "g", "nombre": "mantequilla"}, {"cantidad": "1500", "unidad": "ml", "nombre": "caldo de pollo"}, {"cantidad": "70", "unidad": "ml", "nombre": "vino blanco"}, {"cantidad": "1", "unidad": "unidades", "nombre": "pechuga de pollo bridada"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "especias"}], "kosher": true, "id": 62, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Escalfar", "comensales_base": 2, "jarra": "acero", "pasos": ["Caldo + vino + especias, 90ºC, 25-30 min.", "A los 5 min, agregar pechuga.", "Marcar a plancha o ensalada."], "jarra_razon": "Usa cuchillas para escalfar", "dificultad": "Fácil", "fuente": "oficial", "duracion": "45 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Carnes", "nombre": "Ternera escalfada", "ingredientes": [{"cantidad": "500", "unidad": "g", "nombre": "ternera en una sola pieza"}, {"cantidad": "100", "unidad": "ml", "nombre": "vino tinto"}, {"cantidad": "1", "unidad": "unidades", "nombre": "zanahoria"}, {"cantidad": "1", "unidad": "unidades", "nombre": "cebolla"}, {"cantidad": "2", "unidad": "unidades", "nombre": "ajo"}, {"cantidad": "1", "unidad": "hoja", "nombre": "laurel"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "pimienta"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "sal"}], "kosher": true, "id": 63, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Escalfar", "comensales_base": 1, "jarra": "acero", "pasos": ["Cebolla + zanahoria en cuartos.", "Todos ingredientes, 95ºC, 1 h sin movimiento.", "Marcar a plancha, jugo reducido."], "jarra_razon": "Usa cuchillas para escalfar", "dificultad": "Fácil", "fuente": "oficial", "duracion": "1h", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Postres", "nombre": "Peras al vino", "ingredientes": [{"cantidad": "2", "unidad": "unidades", "nombre": "peras"}, {"cantidad": "50", "unidad": "g", "nombre": "azúcar"}, {"cantidad": "200", "unidad": "ml", "nombre": "vino tinto"}, {"cantidad": "1", "unidad": "rama", "nombre": "canela en rama"}, {"cantidad": "1", "unidad": "unidades", "nombre": "corteza de limón"}], "kosher": true, "id": 64, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Escalfar", "comensales_base": 2, "jarra": "acero", "pasos": ["Pelar peras sin trocear.", "Cocinar 80ºC, 60 min sin movimiento, girar cada 15 min.", "Servir templado o frío."], "jarra_razon": "Usa cuchillas para escalfar", "dificultad": "Fácil", "fuente": "oficial", "duracion": "1h 15 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Postres", "nombre": "Huevos escalfados", "ingredientes": [{"cantidad": "6", "unidad": "unidades", "nombre": "huevos"}, {"cantidad": "1500", "unidad": "ml", "nombre": "agua"}, {"cantidad": "50", "unidad": "ml", "nombre": "vinagre"}, {"cantidad": "50", "unidad": "ml", "nombre": "aceite"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "sal"}], "kosher": true, "id": 65, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Escalfar", "comensales_base": 2, "jarra": "acero", "pasos": ["Agua + vinagre + aceite 120ºC vel 1, 12 min.", "Verter huevos 1 a 1, 100ºC vel 1, 2 min.", "Repetir proceso."], "jarra_razon": "Usa cuchillas para escalfar", "dificultad": "Media", "fuente": "oficial", "duracion": "20 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Verduras y arroces", "nombre": "Verduras al vapor", "ingredientes": [{"cantidad": "0.5", "unidad": "unidades", "nombre": "brócoli"}, {"cantidad": "2", "unidad": "unidades", "nombre": "patatas"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "aceite de oliva"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "sal"}], "kosher": true, "id": 66, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Vapor", "comensales_base": 2, "jarra": "acero", "pasos": ["Agua 500 ml.", "Vaporera con aceite.", "Brócoli + patatas en cuartos.", "Vapor 120ºC, 15 min."], "jarra_razon": "Usa cuchillas para vapor", "dificultad": "Fácil", "fuente": "oficial", "duracion": "30 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Pescados", "nombre": "Pescado al vapor", "ingredientes": [{"cantidad": "2", "unidad": "unidades", "nombre": "filetes de merluza"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "aceite de oliva"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "sal"}], "kosher": true, "id": 67, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Vapor", "comensales_base": 2, "jarra": "acero", "pasos": ["Agua 500 ml.", "Vaporera con aceite.", "Filetes en vaporera.", "Vapor 120ºC, 20 min."], "jarra_razon": "Usa cuchillas para vapor", "dificultad": "Fácil", "fuente": "oficial", "duracion": "30 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Pescados", "nombre": "Mejillones al vapor", "ingredientes": [{"cantidad": "500", "unidad": "g", "nombre": "mejillones"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "sal"}], "kosher": false, "id": 68, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Vapor", "comensales_base": 2, "jarra": "acero", "pasos": ["Agua 500 ml.", "Mejillones en vaporera.", "Vapor 120ºC, 5 min."], "jarra_razon": "Usa cuchillas para vapor", "dificultad": "Fácil", "fuente": "oficial", "duracion": "15 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Postres", "nombre": "Flan", "ingredientes": [{"cantidad": "100", "unidad": "g", "nombre": "azúcar"}, {"cantidad": "500", "unidad": "ml", "nombre": "leche"}, {"cantidad": "4", "unidad": "unidades", "nombre": "huevos"}, {"cantidad": "1", "unidad": "unidades", "nombre": "piel de limón"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "caramelo líquido"}], "kosher": true, "id": 69, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 8, "funcion": "Vapor/Baño María", "comensales_base": 6, "jarra": "acero", "pasos": ["Caramelo en molde.", "Mariposa + leche + piel limón 100ºC potencia 4, vel 1, 5 min.", "Enfriar, quitar piel.", "Azúcar + huevos vel 4, 15 seg.", "Agua 1 l, vaporera.", "Cocinar 120ºC, 30 min."], "jarra_razon": "Usa cuchillas para vapor/baño maría", "dificultad": "Fácil", "fuente": "oficial", "duracion": "45 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Postres", "nombre": "Pudín", "ingredientes": [{"cantidad": "120", "unidad": "g", "nombre": "azúcar"}, {"cantidad": "500", "unidad": "ml", "nombre": "leche entera"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "caramelo"}, {"cantidad": "4", "unidad": "unidades", "nombre": "huevos"}, {"cantidad": "150", "unidad": "g", "nombre": "pan o bollería"}], "kosher": true, "id": 70, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 8, "funcion": "Vapor/Baño María", "comensales_base": 6, "jarra": "acero", "pasos": ["Caramelo en molde.", "Leche + azúcar + huevos vel 3, 10 seg.", "Pan a trozos vel 2, 1 min.", "Tapar film.", "Agua 2.2 l, vaporera.", "Cocinar 120ºC potencia 10, 60 min."], "jarra_razon": "Usa cuchillas para vapor/baño maría", "dificultad": "Fácil", "fuente": "oficial", "duracion": "1h", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Verduras y arroces", "nombre": "Verduras hervidas", "ingredientes": [{"cantidad": "1", "unidad": "unidades", "nombre": "patata"}, {"cantidad": "2", "unidad": "unidades", "nombre": "zanahoria"}, {"cantidad": "0.5", "unidad": "unidades", "nombre": "calabacín"}, {"cantidad": "0.5", "unidad": "unidades", "nombre": "cebolla"}, {"cantidad": "1500", "unidad": "ml", "nombre": "agua"}], "kosher": true, "id": 71, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Hervir", "comensales_base": 1, "jarra": "acero", "pasos": ["Limpiar y trocear verduras.", "Hervir 100ºC potencia 6 sin velocidad, 25 min, cubilete medio abierto."], "jarra_razon": "Usa cuchillas para hervir", "dificultad": "Fácil", "fuente": "oficial", "duracion": "30 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Postres", "nombre": "Huevos cocidos", "ingredientes": [{"cantidad": "1500", "unidad": "ml", "nombre": "agua"}, {"cantidad": "3", "unidad": "unidades", "nombre": "huevos"}], "kosher": true, "id": 72, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Hervir", "comensales_base": 1, "jarra": "acero", "pasos": ["Agua 100ºC sin movimiento, 15 min potencia 6, cubilete medio abierto."], "jarra_razon": "Usa cuchillas para hervir", "dificultad": "Fácil", "fuente": "oficial", "duracion": "15 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Verduras y arroces", "nombre": "Pasta", "ingredientes": [{"cantidad": "200", "unidad": "g", "nombre": "pasta"}, {"cantidad": "2000", "unidad": "ml", "nombre": "agua"}, {"cantidad": "1", "unidad": "hoja", "nombre": "laurel"}, {"cantidad": "1", "unidad": "cucharadita", "nombre": "sal"}], "kosher": true, "id": 73, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Hervir", "comensales_base": 2, "jarra": "acero", "pasos": ["Hervir agua 110ºC potencia 6, 15 min.", "Agregar pasta + laurel.", "Escurrir."], "jarra_razon": "Usa cuchillas para hervir", "dificultad": "Fácil", "fuente": "oficial", "duracion": "45 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Carnes", "nombre": "Potaje de garbanzos", "ingredientes": [{"cantidad": "250", "unidad": "g", "nombre": "garbanzos cocidos"}, {"cantidad": "200", "unidad": "g", "nombre": "espinacas"}, {"cantidad": "500", "unidad": "ml", "nombre": "caldo"}, {"cantidad": "20", "unidad": "ml", "nombre": "aceite de oliva"}, {"cantidad": "0.5", "unidad": "unidades", "nombre": "cebolla"}, {"cantidad": "1", "unidad": "unidades", "nombre": "patata"}, {"cantidad": "2", "unidad": "diente", "nombre": "ajo"}, {"cantidad": "2", "unidad": "unidades", "nombre": "huevo duro"}, {"cantidad": "1", "unidad": "cucharada", "nombre": "tomate concentrado"}, {"cantidad": "1", "unidad": "cucharadita", "nombre": "pimentón"}, {"cantidad": "1", "unidad": "hoja", "nombre": "laurel"}, {"cantidad": "1", "unidad": "pellizco", "nombre": "sal"}], "kosher": false, "id": 74, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Hervir", "comensales_base": 2, "jarra": "acero", "pasos": ["Cebolla + ajo vel 5, 10 seg.", "Patata chascada, caldo, tomate, pimentón, laurel 100ºC potencia 6 vel 1, 20 min.", "Garbanzos + espinacas, 10 min.", "Huevo duro picado."], "jarra_razon": "Usa cuchillas para hervir", "dificultad": "Fácil", "fuente": "oficial", "duracion": "45 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Sopas y cremas", "nombre": "Crema de lentejas", "ingredientes": [{"cantidad": "200", "unidad": "g", "nombre": "lentejas"}, {"cantidad": "400", "unidad": "ml", "nombre": "agua"}, {"cantidad": "300", "unidad": "ml", "nombre": "caldo de pollo"}, {"cantidad": "100", "unidad": "ml", "nombre": "nata"}, {"cantidad": "2", "unidad": "diente", "nombre": "ajo"}, {"cantidad": "1", "unidad": "unidades", "nombre": "zanahoria"}, {"cantidad": "0.5", "unidad": "unidades", "nombre": "cebolla"}, {"cantidad": "1", "unidad": "cucharada", "nombre": "mostaza de Dijon"}, {"cantidad": "1", "unidad": "cucharadita", "nombre": "curry"}, {"cantidad": "1", "unidad": "pellizco", "nombre": "sal"}, {"cantidad": "1", "unidad": "pellizco", "nombre": "pimienta"}], "kosher": true, "id": 75, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 8, "funcion": "Hervir", "comensales_base": 4, "jarra": "acero", "pasos": ["Cebolla + zanahoria en cuartos + ajos, vel 5, 10 seg.", "Lentejas + caldo + especias, hervir 100ºC sin vel potencia 6, 60 min.", "Triturar vel 6 progresivo.", "Nata."], "jarra_razon": "Usa cuchillas para hervir", "dificultad": "Fácil", "fuente": "oficial", "duracion": "45 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Salsas y aderezos", "nombre": "Salsa de tomate", "ingredientes": [{"cantidad": "400", "unidad": "g", "nombre": "tomate natural"}, {"cantidad": "0.5", "unidad": "unidades", "nombre": "cebolla"}, {"cantidad": "0.5", "unidad": "unidades", "nombre": "pimiento rojo"}, {"cantidad": "0.5", "unidad": "unidades", "nombre": "pimiento verde"}, {"cantidad": "1", "unidad": "unidades", "nombre": "zanahoria"}, {"cantidad": "1", "unidad": "cucharada", "nombre": "sal"}, {"cantidad": "1", "unidad": "cucharada", "nombre": "azúcar"}, {"cantidad": "0.5", "unidad": "cucharadita", "nombre": "pimienta"}, {"cantidad": "30", "unidad": "ml", "nombre": "aceite de oliva"}], "kosher": true, "id": 76, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 8, "funcion": "Cocinar", "comensales_base": 4, "jarra": "acero", "pasos": ["Trocear verduras vel 6, 10 seg.", "Sofrito 100ºC vel 1, 5 min.", "Tomate, 20 min cubilete abierto."], "jarra_razon": "Usa cuchillas para cocinar", "dificultad": "Fácil", "fuente": "oficial", "duracion": "30 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Salsas y aderezos", "nombre": "Bechamel", "ingredientes": [{"cantidad": "40", "unidad": "g", "nombre": "mantequilla"}, {"cantidad": "40", "unidad": "g", "nombre": "harina"}, {"cantidad": "500", "unidad": "ml", "nombre": "leche"}, {"cantidad": "1", "unidad": "pellizco", "nombre": "nuez moscada"}, {"cantidad": "1", "unidad": "pellizco", "nombre": "sal"}, {"cantidad": "1", "unidad": "pellizco", "nombre": "pimienta"}], "kosher": true, "id": 77, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 8, "funcion": "Cocinar", "comensales_base": 4, "jarra": "acero", "pasos": ["Mantequilla 95ºC, 1 min.", "Harina, tostamos 5 min.", "Leche en hilo fino, 5 min."], "jarra_razon": "Usa cuchillas para cocinar", "dificultad": "Fácil", "fuente": "oficial", "duracion": "15 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Postres", "nombre": "Chocolate a la taza", "ingredientes": [{"cantidad": "400", "unidad": "g", "nombre": "chocolate fondant"}, {"cantidad": "80", "unidad": "g", "nombre": "azúcar"}, {"cantidad": "1500", "unidad": "ml", "nombre": "leche entera"}], "kosher": true, "id": 78, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 8, "funcion": "Cocinar", "comensales_base": 4, "jarra": "acero", "pasos": ["Pulverizar chocolate vel 10, 10-20 seg.", "Leche + azúcar, 100ºC vel 2, potencia 3, 12 min.", "Batir final vel 4, 20 seg."], "jarra_razon": "Usa cuchillas para cocinar", "dificultad": "Media", "fuente": "oficial", "duracion": "30 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Postres", "nombre": "Natillas", "ingredientes": [{"cantidad": "125", "unidad": "g", "nombre": "azúcar"}, {"cantidad": "600", "unidad": "ml", "nombre": "leche"}, {"cantidad": "4", "unidad": "unidades", "nombre": "yema"}, {"cantidad": "2", "unidad": "cucharada", "nombre": "maicena"}, {"cantidad": "1", "unidad": "cucharadita", "nombre": "extracto de vainilla"}, {"cantidad": "1", "unidad": "unidades", "nombre": "piel de limón"}, {"cantidad": "1", "unidad": "pellizco", "nombre": "canela"}], "kosher": true, "id": 79, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 8, "funcion": "Cocinar", "comensales_base": 4, "jarra": "acero", "pasos": ["Leche + huevos + azúcar + maicena + vainilla + piel.", "Cocinar 90ºC vel 2, potencia 3, 10 min.", "Moldes, canela, enfriar."], "jarra_razon": "Usa cuchillas para cocinar", "dificultad": "Fácil", "fuente": "oficial", "duracion": "15 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Verduras y arroces", "nombre": "Arroz blanco", "ingredientes": [{"cantidad": "175", "unidad": "g", "nombre": "arroz"}, {"cantidad": "400", "unidad": "ml", "nombre": "agua"}, {"cantidad": "25", "unidad": "ml", "nombre": "aceite de oliva"}, {"cantidad": "2", "unidad": "diente", "nombre": "ajo"}, {"cantidad": "0.5", "unidad": "hoja", "nombre": "laurel"}, {"cantidad": "1", "unidad": "pellizco", "nombre": "sal"}], "kosher": true, "id": 80, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 8, "funcion": "Slow Mambo", "comensales_base": 4, "jarra": "acero", "pasos": ["Agua + ajo + laurel + sal, 100ºC 7 min potencia.", "Agregar arroz, 100ºC 13 min potencia.", "Reposar 2-3 min."], "jarra_razon": "Usa cuchillas para slow mambo", "dificultad": "Fácil", "fuente": "oficial", "duracion": "30 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Carnes", "nombre": "Arroz meloso", "ingredientes": [{"cantidad": "200", "unidad": "g", "nombre": "arroz"}, {"cantidad": "80", "unidad": "g", "nombre": "judías verdes"}, {"cantidad": "50", "unidad": "g", "nombre": "tomate frito"}, {"cantidad": "600", "unidad": "ml", "nombre": "caldo de pollo"}, {"cantidad": "4", "unidad": "unidades", "nombre": "alitas de pollo"}, {"cantidad": "4", "unidad": "unidades", "nombre": "muslitos de pollo"}, {"cantidad": "2", "unidad": "unidades", "nombre": "alcachofas"}, {"cantidad": "1", "unidad": "pizca", "nombre": "colorante"}, {"cantidad": "1", "unidad": "pellizco", "nombre": "sal"}, {"cantidad": "30", "unidad": "ml", "nombre": "aceite de oliva"}], "kosher": false, "id": 81, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Slow Mambo", "comensales_base": 2, "jarra": "acero", "pasos": ["Sofrer carne 120ºC potencia 5, 15 min sin vel.", "Alcachofas + judías, 5 min.", "Tomate + ingredientes, 12 min.", "Reposar 5 min."], "jarra_razon": "Usa cuchillas para slow mambo", "dificultad": "Media", "fuente": "oficial", "duracion": "30 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Verduras y arroces", "nombre": "Risotto", "ingredientes": [{"cantidad": "200", "unidad": "g", "nombre": "arroz"}, {"cantidad": "50", "unidad": "g", "nombre": "jamón"}, {"cantidad": "40", "unidad": "g", "nombre": "puerro"}, {"cantidad": "40", "unidad": "g", "nombre": "setas"}, {"cantidad": "25", "unidad": "g", "nombre": "mantequilla"}, {"cantidad": "25", "unidad": "g", "nombre": "parmesano"}, {"cantidad": "575", "unidad": "ml", "nombre": "caldo de pollo"}, {"cantidad": "20", "unidad": "ml", "nombre": "vino blanco"}, {"cantidad": "1", "unidad": "pellizco", "nombre": "sal"}, {"cantidad": "30", "unidad": "ml", "nombre": "aceite de oliva"}], "kosher": true, "id": 82, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Slow Mambo", "comensales_base": 2, "jarra": "acero", "pasos": ["Puerro + setas trocear vel 5, 10 seg.", "Sofrer + jamón 100ºC vel 1, 4 min.", "Arroz + caldo + vino, 95ºC vel 1, 15 min.", "Últimos 2 min: mantequilla + parmesano."], "jarra_razon": "Usa cuchillas para slow mambo", "dificultad": "Media", "fuente": "oficial", "duracion": "30 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Carnes", "nombre": "Gachas", "ingredientes": [{"cantidad": "100", "unidad": "g", "nombre": "harina de almortas"}, {"cantidad": "600", "unidad": "ml", "nombre": "agua"}, {"cantidad": "2", "unidad": "unidades", "nombre": "ajo"}, {"cantidad": "3", "unidad": "loncha", "nombre": "panceta"}, {"cantidad": "2", "unidad": "unidades", "nombre": "chorizo"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "aceite"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "sal"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "pimentón picante"}], "kosher": false, "id": 83, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Slow Mambo", "comensales_base": 2, "jarra": "acero", "pasos": ["Panceta + chorizo + ajo + aceite, 100ºC sin vel, potencia 6, 15 min.", "Harina, 5 min.", "Agua progresivamente vel.", "Pimentón + sal."], "jarra_razon": "Usa cuchillas para slow mambo", "dificultad": "Fácil", "fuente": "oficial", "duracion": "30 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Carnes", "nombre": "Patatas a la riojana", "ingredientes": [{"cantidad": "500", "unidad": "g", "nombre": "patata"}, {"cantidad": "250", "unidad": "g", "nombre": "chorizo"}, {"cantidad": "120", "unidad": "g", "nombre": "pimiento rojo"}, {"cantidad": "25", "unidad": "ml", "nombre": "aceite de oliva"}, {"cantidad": "3", "unidad": "unidades", "nombre": "ajo"}, {"cantidad": "0.5", "unidad": "unidades", "nombre": "cebolla"}, {"cantidad": "2", "unidad": "hoja", "nombre": "laurel"}, {"cantidad": "1", "unidad": "cucharadita", "nombre": "pimentón dulce"}, {"cantidad": "1", "unidad": "cucharadita", "nombre": "pimentón picante"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "sal"}], "kosher": true, "id": 84, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 8, "funcion": "Slow Mambo", "comensales_base": 4, "jarra": "acero", "pasos": ["Cebolla + ajo + pimiento vel 7, 5 seg.", "Cocinar 100ºC potencia 6, vel 1, 5 min.", "Chorizo rodajas, 5 min.", "Patata chascada + laurel + pimentón, 100ºC potencia 8, 25 min sin vel."], "jarra_razon": "Usa cuchillas para slow mambo", "dificultad": "Fácil", "fuente": "oficial", "duracion": "30 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Sopas y cremas", "nombre": "Crema de guisantes", "ingredientes": [{"cantidad": "400", "unidad": "g", "nombre": "guisantes congelados"}, {"cantidad": "125", "unidad": "g", "nombre": "puerro"}, {"cantidad": "75", "unidad": "g", "nombre": "cebolla"}, {"cantidad": "50", "unidad": "g", "nombre": "mantequilla"}, {"cantidad": "400", "unidad": "ml", "nombre": "agua"}, {"cantidad": "1", "unidad": "pellizco", "nombre": "sal"}, {"cantidad": "1", "unidad": "pellizco", "nombre": "pimienta"}], "kosher": true, "id": 85, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 8, "funcion": "Mantener caliente", "comensales_base": 4, "jarra": "acero", "pasos": ["Mantequilla 100ºC, 1 min.", "Puerro + cebolla trocear vel.", "Sofrer 10 min.", "Guisantes, sofrer 5 min.", "Agua, hervir 10 min.", "Triturar vel.", "Mantener 60ºC vel 1."], "jarra_razon": "Usa cuchillas para mantener caliente", "dificultad": "Fácil", "fuente": "oficial", "duracion": "30 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Sopas y cremas", "nombre": "Sopa de cebolla", "ingredientes": [{"cantidad": "400", "unidad": "g", "nombre": "cebolla"}, {"cantidad": "40", "unidad": "g", "nombre": "emmental rallado"}, {"cantidad": "40", "unidad": "g", "nombre": "parmesano rallado"}, {"cantidad": "700", "unidad": "ml", "nombre": "agua"}, {"cantidad": "30", "unidad": "ml", "nombre": "aceite de oliva"}, {"cantidad": "2", "unidad": "pastilla", "nombre": "caldo de carne"}, {"cantidad": "4", "unidad": "rebanada", "nombre": "pan"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "sal"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "pimienta"}], "kosher": true, "id": 86, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 8, "funcion": "Mantener caliente", "comensales_base": 4, "jarra": "acero", "pasos": ["Cebolla + aceite vel 4, 3 seg.", "Cocinar 100ºC potencia 4, vel 1, 10 min.", "Agua + pastillas, 120ºC vel 1, potencia 6, 20 min.", "Mantener 60ºC vel 1."], "jarra_razon": "Usa cuchillas para mantener caliente", "dificultad": "Fácil", "fuente": "oficial", "duracion": "30 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Salsas y aderezos", "nombre": "Salsa de queso azul", "ingredientes": [{"cantidad": "200", "unidad": "g", "nombre": "queso azul"}, {"cantidad": "300", "unidad": "ml", "nombre": "nata"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "pimienta"}], "kosher": true, "id": 87, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Mantener caliente", "comensales_base": 1, "jarra": "acero", "pasos": ["Todos ingredientes, 90ºC potencia 4, vel 2, 5 min.", "Mantener 45ºC potencia 4, vel 1."], "jarra_razon": "Usa cuchillas para mantener caliente", "dificultad": "Fácil", "fuente": "oficial", "duracion": "10 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Panificados", "nombre": "Pan brioche", "ingredientes": [{"cantidad": "525", "unidad": "g", "nombre": "harina"}, {"cantidad": "25", "unidad": "g", "nombre": "levadura fresca"}, {"cantidad": "100", "unidad": "g", "nombre": "mantequilla"}, {"cantidad": "25", "unidad": "g", "nombre": "azúcar"}, {"cantidad": "10", "unidad": "g", "nombre": "sal"}, {"cantidad": "90", "unidad": "ml", "nombre": "leche"}, {"cantidad": "4", "unidad": "unidades", "nombre": "huevos"}, {"cantidad": "1", "unidad": "unidades", "nombre": "huevo para pintar"}], "kosher": false, "id": 88, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Fermentar", "comensales_base": 1, "jarra": "acero", "pasos": ["Leche 80ºC 30 seg potencia.", "Levadura desmenuzada vel.", "Huevos + harina + mantequilla + azúcar + sal vel.", "Reposar 1 h.", "Amasar 1 min vel.", "Hornear 180ºC 30-40 min."], "jarra_razon": "Usa cuchillas para fermentar", "dificultad": "Media", "fuente": "oficial", "duracion": "2h", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Panificados", "nombre": "Masa para empanada", "ingredientes": [{"cantidad": "450", "unidad": "g", "nombre": "harina de fuerza"}, {"cantidad": "25", "unidad": "g", "nombre": "levadura fresca"}, {"cantidad": "40", "unidad": "g", "nombre": "manteca de cerdo"}, {"cantidad": "100", "unidad": "ml", "nombre": "aceite de oliva"}, {"cantidad": "50", "unidad": "ml", "nombre": "vino blanco"}, {"cantidad": "50", "unidad": "ml", "nombre": "agua"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "sal"}, {"cantidad": "1", "unidad": "unidades", "nombre": "huevo para pintar"}], "kosher": false, "id": 89, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Fermentar", "comensales_base": 1, "jarra": "acero", "pasos": ["Agua + aceite + vino, 100ºC 30 seg potencia.", "Levadura desmenuzada vel.", "Harina + sal vel.", "Reposar 30 min cubilete puesto."], "jarra_razon": "Usa cuchillas para fermentar", "dificultad": "Media", "fuente": "oficial", "duracion": "2h", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Panificados", "nombre": "Tortitas americanas", "ingredientes": [{"cantidad": "200", "unidad": "g", "nombre": "harina"}, {"cantidad": "40", "unidad": "g", "nombre": "azúcar"}, {"cantidad": "50", "unidad": "g", "nombre": "mantequilla"}, {"cantidad": "10", "unidad": "g", "nombre": "levadura química"}, {"cantidad": "300", "unidad": "ml", "nombre": "leche"}, {"cantidad": "2", "unidad": "unidades", "nombre": "huevos"}], "kosher": true, "id": 90, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Fermentar", "comensales_base": 1, "jarra": "acero", "pasos": ["Mantequilla, 60ºC potencia 4, vel 2, 2 min.", "Resto ingredientes vel 4, 1 min.", "Reposar 30 min.", "Cocinar en sartén."], "jarra_razon": "Usa cuchillas para fermentar", "dificultad": "Media", "fuente": "oficial", "duracion": "2h", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Postres", "nombre": "Flan de leche condensada", "ingredientes": [{"cantidad": "200", "unidad": "g", "nombre": "calabaza"}, {"cantidad": "325", "unidad": "ml", "nombre": "leche condensada"}, {"cantidad": "325", "unidad": "ml", "nombre": "leche evaporada"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "extracto de vainilla"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "caramelo líquido"}], "kosher": true, "id": 91, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 8, "funcion": "Baño María", "comensales_base": 6, "jarra": "acero", "pasos": ["Caramelo en molde.", "Todos ingredientes vel 4 homogéneo.", "Molde + film.", "Agua 2.2 l, flanera.", "Cocinar 110ºC potencia 10, 1 h.", "Frigorífico 5 h."], "jarra_razon": "Usa cuchillas para baño maría", "dificultad": "Fácil", "fuente": "oficial", "duracion": "1h 15 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Postres", "nombre": "Pudín de croissant", "ingredientes": [{"cantidad": "120", "unidad": "g", "nombre": "croissant"}, {"cantidad": "120", "unidad": "g", "nombre": "azúcar"}, {"cantidad": "400", "unidad": "ml", "nombre": "leche"}, {"cantidad": "3", "unidad": "unidades", "nombre": "huevos"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "canela"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "ralladura de limón"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "caramelo"}], "kosher": true, "id": 92, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 8, "funcion": "Baño María", "comensales_base": 6, "jarra": "acero", "pasos": ["Caramelo en molde.", "Leche + azúcar + huevos vel 4, 2 min.", "Croissant a trozos vel 2, 1 min.", "Molde + film.", "Agua 2.2 l, flanera.", "Cocinar 110ºC potencia 10, 1 h."], "jarra_razon": "Usa cuchillas para baño maría", "dificultad": "Fácil", "fuente": "oficial", "duracion": "1h 15 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Postres", "nombre": "Huevos revueltos", "ingredientes": [{"cantidad": "4", "unidad": "unidades", "nombre": "huevos"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "aceite"}, {"cantidad": "1", "unidad": "al gusto", "nombre": "sal"}], "kosher": true, "id": 93, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Baño María", "comensales_base": 1, "jarra": "acero", "pasos": ["Agua 2.2 l, 120ºC potencia 10, 15 min.", "Recipiente baño María + aceite.", "Huevos chascados, remover hasta cuajar."], "jarra_razon": "Usa cuchillas para baño maría", "dificultad": "Fácil", "fuente": "oficial", "duracion": "20 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Panificados", "nombre": "Pan rallado", "ingredientes": [{"cantidad": "200", "unidad": "g", "nombre": "pan seco"}], "kosher": true, "id": 94, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Rallar", "comensales_base": 1, "jarra": "acero", "pasos": ["Pan en trozos.", "3 golpes turbo.", "Vel 10, 1 min.", "Repetir si es necesario."], "jarra_razon": "Usa cuchillas para rallar", "dificultad": "Fácil", "fuente": "oficial", "duracion": "5 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Salsas y aderezos", "nombre": "Tomate rallado", "ingredientes": [{"cantidad": "1", "unidad": "kg", "nombre": "tomates"}], "kosher": true, "id": 95, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Rallar", "comensales_base": 1, "jarra": "acero", "pasos": ["Tomates en cuartos.", "Vel 6, 10 seg."], "jarra_razon": "Usa cuchillas para rallar", "dificultad": "Fácil", "fuente": "oficial", "duracion": "5 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"categoria": "Salsas y aderezos", "nombre": "Queso rallado", "ingredientes": [{"cantidad": "200", "unidad": "g", "nombre": "parmesano"}], "kosher": true, "id": 96, "versiones": [{"fuente_nombre": "Cecotec", "comensales_max": 4, "funcion": "Rallar", "comensales_base": 1, "jarra": "acero", "pasos": ["Parmesano troceado.", "3 golpes turbo.", "Vel 10, 30 seg.", "Repetir si es necesario."], "jarra_razon": "Usa cuchillas para rallar", "dificultad": "Fácil", "fuente": "oficial", "duracion": "5 min", "aparato": "mambo", "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}, {"id": 97, "nombre": "Sopa de coliflor", "categoria": "Sopas y cremas", "kosher": true, "ingredientes": [{"cantidad": "80", "unidad": "g", "nombre": "cebolla"}, {"cantidad": "25", "unidad": "g", "nombre": "aceite de oliva"}, {"cantidad": "200", "unidad": "g", "nombre": "patatas"}, {"cantidad": "100", "unidad": "g", "nombre": "mezcla de verduras variadas"}, {"cantidad": "200", "unidad": "g", "nombre": "coliflor"}, {"cantidad": "800", "unidad": "g", "nombre": "agua"}, {"cantidad": "2", "unidad": "cucharada", "nombre": "concentrado de caldo"}, {"cantidad": "2", "unidad": "pizca", "nombre": "pimienta"}, {"cantidad": "100", "unidad": "g", "nombre": "crema agria"}], "versiones": [{"aparato": "mambo", "funcion": "Triturar", "comensales_base": 4, "comensales_max": 8, "duracion": "19 min", "dificultad": "Fácil", "jarra": "acero", "jarra_razon": "Usa cuchillas para trocear y triturar", "fuente": "oficial", "fuente_nombre": "App Mambo Touch", "pasos": ["Colocar las cuchillas en su posición.", "Introducir en la jarra 80 g de cebolla. Cerrar la tapa y colocar el vaso medidor. Vel 7, 3 seg.", "Bajar los restos de las paredes de la jarra con la espátula y verter 25 g de aceite de oliva. Cerrar la tapa y colocar el vaso medidor. Vel 1, 120ºC, control Tª 8, 2:30 min.", "Agregar 100 g de patatas y 100 g de mezcla de verduras variadas. Cerrar la tapa y colocar el vaso medidor. Vel 7, 5 seg.", "Añadir otros 100 g de patatas y 200 g de coliflor. Cerrar la tapa y colocar el vaso medidor. Vel 7, 4 seg.", "Agregar 800 g de agua, 2 cucharadas de concentrado de caldo y 2 pizcas de pimienta. Cerrar la tapa y colocar el vaso medidor. Sin velocidad, 100ºC, control Tª 10, 17 min.", "Verter 100 g de crema agria, remover con la espátula y dejar reposar 5 minutos antes de servir."], "tiempo_escala": "rango", "observaciones": [], "video_url": null}]}];
 
-        // Estado de los filtros
         let filtros = { categoria: 'todas', kosher: false, busqueda: '' };
-        // Comensales actuales por receta
         const comensalesActuales = {};
-        RECETAS.forEach(r => { comensalesActuales[r.id] = r.comensales_base; });
+        // Por ahora solo hay versión Mambo (versiones[0]); cuando existan
+        // más aparatos, esta función elegirá la versión activa por receta.
+        function versionActiva(receta) {
+            return receta.versiones[0];
+        }
+        RECETAS.forEach(r => { comensalesActuales[r.id] = versionActiva(r).comensales_base; });
 
         function escalarCantidad(cantidad, base, actual) {
             const num = parseFloat(cantidad);
             if (isNaN(num)) return cantidad;
             const resultado = num * actual / base;
-            return Number.isInteger(resultado) ? resultado.toString() : resultado.toFixed(1).replace(/\.0$/, '');
+            if (Number.isInteger(resultado)) return resultado.toString();
+            const r1 = parseFloat(resultado.toFixed(1));
+            return r1.toString();
         }
 
         function jarraLabel(jarra) {
@@ -649,11 +556,21 @@
             return '🔧 Ambas jarras';
         }
 
+        function avisoTiempoTexto(tiempoEscala) {
+            if (tiempoEscala === 'fijo') {
+                return 'El tiempo de cocción no varía con la cantidad (cocción por pieza).';
+            }
+            if (tiempoEscala === 'estructura') {
+                return 'El tiempo es técnico (masa/montado) y no debe modificarse al escalar.';
+            }
+            return 'Los tiempos de cocción son orientativos y pueden variar al cambiar las cantidades.';
+        }
+
         function renderRecetas() {
             const grid = document.getElementById('recetasGrid');
             grid.innerHTML = '';
 
-            const filtradas = RECETAS.filter(r => {
+            let filtradas = RECETAS.filter(r => {
                 if (filtros.categoria !== 'todas' && r.categoria !== filtros.categoria) return false;
                 if (filtros.kosher && !r.kosher) return false;
                 if (filtros.busqueda) {
@@ -664,6 +581,15 @@
                 }
                 return true;
             });
+
+            // En modo "¿Qué tengo?" ordenamos por % de cobertura de ingredientes
+            // (ranking, no filtro estricto: nada se oculta, solo se reordena).
+            if (modoActual === 'queTengo' && ingredientesDisponibles.length > 0) {
+                filtradas = filtradas
+                    .map(r => ({ receta: r, cobertura: calcularCobertura(r) }))
+                    .sort((a, b) => b.cobertura.pct - a.cobertura.pct)
+                    .map(x => x.receta);
+            }
 
             document.getElementById('contador').textContent =
                 filtradas.length === RECETAS.length
@@ -676,37 +602,50 @@
             }
 
             filtradas.forEach(receta => {
+                const v = versionActiva(receta);
                 const actual = comensalesActuales[receta.id];
                 const card = document.createElement('div');
                 card.className = 'receta-card';
                 card.dataset.id = receta.id;
 
-                const difClass = receta.dificultad === 'Fácil' ? 'green' : '';
+                const difClass = v.dificultad === 'Fácil' ? 'green' : '';
                 const kosherBadge = receta.kosher ? '<span class="badge blue">✡ Kosher</span>' : '';
+
+                let coberturaHtml = '';
+                if (modoActual === 'queTengo' && ingredientesDisponibles.length > 0) {
+                    const cob = calcularCobertura(receta);
+                    const claseCobertura = cob.pct === 100 ? 'completa' : 'parcial';
+                    const etiqueta = cob.pct === 100 ? '✓ Tenés todo' : `${cob.pct}% cubierto`;
+                    const faltantesHtml = cob.faltantes.length
+                        ? `<div class="faltantes-list"><strong>Falta:</strong> ${cob.faltantes.join(', ')}</div>`
+                        : '';
+                    coberturaHtml = `<div class="cobertura-badge ${claseCobertura}">${etiqueta}</div>${faltantesHtml}`;
+                }
 
                 card.innerHTML = `
                     <h3 class="receta-title">${receta.nombre}</h3>
                     <div class="receta-badges">
-                        <span class="badge green">${receta.categoria}</span>
-                        <span class="badge ${difClass}">${receta.dificultad}</span>
+                        <span class="badge">${receta.categoria}</span>
+                        <span class="badge ${difClass}">${v.dificultad}</span>
                         ${kosherBadge}
                     </div>
                     <div class="receta-meta">
-                        <div>⏱ ${receta.duracion}</div>
-                        <div>👥 ${receta.comensales_base} comensales</div>
-                        <div>🔧 ${receta.funcion}</div>
-                        <div>📋 ${receta.fuente_nombre}</div>
+                        <div>⏱ ${v.duracion}</div>
+                        <div>👥 ${v.comensales_base} comensales</div>
+                        <div>🔧 ${v.funcion}</div>
+                        <div>📋 ${v.fuente_nombre}</div>
                     </div>
+                    ${coberturaHtml}
 
                     <div class="receta-expanded">
-                        <div class="jarra-info">${jarraLabel(receta.jarra)} — ${receta.jarra_razon}</div>
+                        <div class="jarra-info">${jarraLabel(v.jarra)} — ${v.jarra_razon}</div>
 
                         <div class="ingredientes-list">
                             <h4>Ingredientes</h4>
                             <ul>
                                 ${receta.ingredientes.map(ing => `
                                     <li>
-                                        <span class="ingrediente-cantidad">${escalarCantidad(ing.cantidad, receta.comensales_base, actual)}${ing.unidad ? ' ' + ing.unidad : ''}</span>
+                                        <span class="ingrediente-cantidad">${escalarCantidad(ing.cantidad, v.comensales_base, actual)}${ing.unidad ? ' ' + ing.unidad : ''}</span>
                                         ${ing.nombre}
                                     </li>
                                 `).join('')}
@@ -716,26 +655,32 @@
                         <div class="escalado-controls">
                             <button class="escalado-btn menos" data-id="${receta.id}">−</button>
                             <span class="comensales-display">${actual} comensales</span>
-                            <button class="escalado-btn mas" data-id="${receta.id}" ${actual >= receta.comensales_max ? 'disabled' : ''}>+</button>
+                            <button class="escalado-btn mas" data-id="${receta.id}" ${actual >= v.comensales_max ? 'disabled' : ''}>+</button>
                         </div>
-                        <div class="aviso-tiempo ${actual !== receta.comensales_base ? 'visible' : ''}">
-                            Los tiempos de cocción son orientativos y pueden variar al cambiar las cantidades.
+                        <div class="aviso-tiempo ${actual !== v.comensales_base ? 'visible' : ''}">
+                            ${avisoTiempoTexto(v.tiempo_escala)}
                         </div>
 
                         <div class="pasos-list">
                             <h4>Preparación</h4>
-                            <ol>${receta.pasos.map(p => `<li>${p}</li>`).join('')}</ol>
+                            <ol>${v.pasos.map(p => `<li>${p}</li>`).join('')}</ol>
                         </div>
+
+                        ${v.observaciones && v.observaciones.length ? `
+                        <div class="observaciones-list">
+                            <h4>Observaciones</h4>
+                            <ul>${v.observaciones.map(o => `<li><strong>${o.fecha}${o.factor ? ' · ×' + o.factor : ''}:</strong> ${o.texto}</li>`).join('')}</ul>
+                        </div>` : ''}
+
+                        ${v.video_url ? `<div class="video-link"><a href="${v.video_url}" target="_blank" rel="noopener">▶ Ver video</a></div>` : ''}
                     </div>
                 `;
 
-                // Toggle expandir
                 card.addEventListener('click', e => {
                     if (e.target.classList.contains('escalado-btn')) return;
                     card.classList.toggle('expanded');
                 });
 
-                // Escalado
                 card.querySelector('.escalado-btn.menos').addEventListener('click', e => {
                     e.stopPropagation();
                     if (comensalesActuales[receta.id] > 1) {
@@ -745,7 +690,7 @@
                 });
                 card.querySelector('.escalado-btn.mas').addEventListener('click', e => {
                     e.stopPropagation();
-                    if (comensalesActuales[receta.id] < receta.comensales_max) {
+                    if (comensalesActuales[receta.id] < v.comensales_max) {
                         comensalesActuales[receta.id]++;
                         actualizarEscalado(card, receta);
                     }
@@ -756,21 +701,21 @@
         }
 
         function actualizarEscalado(card, receta) {
+            const v = versionActiva(receta);
             const actual = comensalesActuales[receta.id];
             card.querySelector('.comensales-display').textContent = `${actual} comensales`;
             card.querySelector('.escalado-btn.menos').disabled = actual <= 1;
-            card.querySelector('.escalado-btn.mas').disabled = actual >= receta.comensales_max;
+            card.querySelector('.escalado-btn.mas').disabled = actual >= v.comensales_max;
             const aviso = card.querySelector('.aviso-tiempo');
-            aviso.classList.toggle('visible', actual !== receta.comensales_base);
+            aviso.classList.toggle('visible', actual !== v.comensales_base);
 
             const items = card.querySelectorAll('.ingrediente-cantidad');
             receta.ingredientes.forEach((ing, i) => {
-                items[i].textContent = escalarCantidad(ing.cantidad, receta.comensales_base, actual)
+                items[i].textContent = escalarCantidad(ing.cantidad, v.comensales_base, actual)
                     + (ing.unidad ? ' ' + ing.unidad : '');
             });
         }
 
-        // Filtros de categoría
         document.querySelectorAll('[data-filter="categoria"]').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('[data-filter="categoria"]').forEach(b => b.classList.remove('active'));
@@ -780,16 +725,173 @@
             });
         });
 
-        // Toggle kosher
         document.querySelector('.filter-btn.kosher').addEventListener('click', function() {
             filtros.kosher = !filtros.kosher;
             this.classList.toggle('active', filtros.kosher);
             renderRecetas();
         });
 
-        // Búsqueda
         document.getElementById('searchBox').addEventListener('input', e => {
             filtros.busqueda = e.target.value.trim();
+            renderRecetas();
+        });
+
+        // ===== Modo "¿Qué tengo?" =====
+
+        // Ingredientes marcados como "al gusto" se excluyen del cálculo de
+        // cobertura (sal, pimienta, aceite para freír, etc. — se asume que
+        // siempre están disponibles).
+        function esAlGusto(ing) {
+            return (ing.cantidad || '').toLowerCase().trim() === 'al gusto';
+        }
+
+        const INGREDIENTES_UNICOS = (() => {
+            const set = new Set();
+            RECETAS.forEach(r => {
+                r.ingredientes.forEach(ing => {
+                    if (!esAlGusto(ing)) set.add(ing.nombre.trim());
+                });
+            });
+            return Array.from(set).sort((a, b) => a.localeCompare(b, 'es'));
+        })();
+
+        let modoActual = 'catalogo'; // 'catalogo' | 'queTengo'
+        let ingredientesDisponibles = []; // strings en minúscula
+
+        function normalizar(s) {
+            return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+        }
+
+        // Un ingrediente disponible "cubre" un ingrediente de receta si uno
+        // contiene al otro (substring en ambos sentidos) — así "aceite"
+        // cubre "aceite de oliva virgen extra" y viceversa.
+        function cubre(disponible, requerido) {
+            const d = normalizar(disponible);
+            const r = normalizar(requerido);
+            return d.includes(r) || r.includes(d);
+        }
+
+        function calcularCobertura(receta) {
+            const relevantes = receta.ingredientes.filter(ing => !esAlGusto(ing));
+            if (relevantes.length === 0) return { pct: 100, faltantes: [] };
+            const faltantes = relevantes.filter(ing =>
+                !ingredientesDisponibles.some(disp => cubre(disp, ing.nombre))
+            );
+            const cubiertos = relevantes.length - faltantes.length;
+            return {
+                pct: Math.round((cubiertos / relevantes.length) * 100),
+                faltantes: faltantes.map(f => f.nombre),
+            };
+        }
+
+        // --- Chips de ingredientes ---
+        const chipsContainer = document.getElementById('chipsContainer');
+        const ingredienteInput = document.getElementById('ingredienteInput');
+        const suggestionsEl = document.getElementById('suggestions');
+        let highlightedIdx = -1;
+
+        function agregarIngrediente(nombre) {
+            const limpio = nombre.trim();
+            if (!limpio) return;
+            if (ingredientesDisponibles.some(i => normalizar(i) === normalizar(limpio))) return;
+            ingredientesDisponibles.push(limpio);
+            renderChips();
+            ingredienteInput.value = '';
+            ocultarSugerencias();
+            renderRecetas();
+        }
+
+        function quitarIngrediente(nombre) {
+            ingredientesDisponibles = ingredientesDisponibles.filter(i => i !== nombre);
+            renderChips();
+            renderRecetas();
+        }
+
+        function renderChips() {
+            chipsContainer.querySelectorAll('.chip').forEach(c => c.remove());
+            ingredientesDisponibles.forEach(ing => {
+                const chip = document.createElement('span');
+                chip.className = 'chip';
+                chip.innerHTML = `${ing} <span class="chip-remove" data-ing="${ing}">×</span>`;
+                chipsContainer.insertBefore(chip, ingredienteInput);
+            });
+            chipsContainer.querySelectorAll('.chip-remove').forEach(btn => {
+                btn.addEventListener('click', () => quitarIngrediente(btn.dataset.ing));
+            });
+        }
+
+        function mostrarSugerencias(query) {
+            const q = normalizar(query);
+            if (!q) { ocultarSugerencias(); return; }
+            const yaAgregados = new Set(ingredientesDisponibles.map(normalizar));
+            const matches = INGREDIENTES_UNICOS
+                .filter(i => normalizar(i).includes(q) && !yaAgregados.has(normalizar(i)))
+                .slice(0, 8);
+            if (matches.length === 0) { ocultarSugerencias(); return; }
+            highlightedIdx = -1;
+            suggestionsEl.innerHTML = matches.map(m => `<div class="suggestion-item" data-value="${m}">${m}</div>`).join('');
+            suggestionsEl.classList.add('visible');
+            suggestionsEl.querySelectorAll('.suggestion-item').forEach(el => {
+                el.addEventListener('click', () => agregarIngrediente(el.dataset.value));
+            });
+        }
+
+        function ocultarSugerencias() {
+            suggestionsEl.classList.remove('visible');
+            suggestionsEl.innerHTML = '';
+            highlightedIdx = -1;
+        }
+
+        ingredienteInput.addEventListener('input', e => mostrarSugerencias(e.target.value));
+
+        ingredienteInput.addEventListener('keydown', e => {
+            const items = suggestionsEl.querySelectorAll('.suggestion-item');
+            if (e.key === 'ArrowDown' && items.length) {
+                e.preventDefault();
+                highlightedIdx = Math.min(highlightedIdx + 1, items.length - 1);
+                items.forEach((el, i) => el.classList.toggle('highlighted', i === highlightedIdx));
+            } else if (e.key === 'ArrowUp' && items.length) {
+                e.preventDefault();
+                highlightedIdx = Math.max(highlightedIdx - 1, 0);
+                items.forEach((el, i) => el.classList.toggle('highlighted', i === highlightedIdx));
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                if (highlightedIdx >= 0 && items[highlightedIdx]) {
+                    agregarIngrediente(items[highlightedIdx].dataset.value);
+                } else if (ingredienteInput.value.trim()) {
+                    agregarIngrediente(ingredienteInput.value);
+                }
+            } else if (e.key === 'Backspace' && !ingredienteInput.value && ingredientesDisponibles.length) {
+                quitarIngrediente(ingredientesDisponibles[ingredientesDisponibles.length - 1]);
+            } else if (e.key === 'Escape') {
+                ocultarSugerencias();
+            }
+        });
+
+        document.addEventListener('click', e => {
+            if (!chipsContainer.contains(e.target) && !suggestionsEl.contains(e.target)) {
+                ocultarSugerencias();
+            }
+        });
+
+        // --- Toggle de modo ---
+        const btnCatalogo = document.getElementById('modoCatalogo');
+        const btnQueTengo = document.getElementById('modoQueTengo');
+        const panelQueTengo = document.getElementById('queTengoPanel');
+
+        btnCatalogo.addEventListener('click', () => {
+            modoActual = 'catalogo';
+            btnCatalogo.classList.add('active');
+            btnQueTengo.classList.remove('active');
+            panelQueTengo.classList.remove('visible');
+            renderRecetas();
+        });
+
+        btnQueTengo.addEventListener('click', () => {
+            modoActual = 'queTengo';
+            btnQueTengo.classList.add('active');
+            btnCatalogo.classList.remove('active');
+            panelQueTengo.classList.add('visible');
             renderRecetas();
         });
 
